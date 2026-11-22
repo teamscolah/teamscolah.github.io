@@ -100,11 +100,11 @@ Every record carries the true person id, so a run can be scored exactly. `kinlin
 
 ## Results
 
-On 10,000 synthetic people with 13,717 records and 4,468 true duplicate pairs, linking takes about five seconds on a laptop:
+On 10,000 synthetic people with 13,717 records and 4,468 true duplicate pairs, linking takes about three seconds on a laptop:
 
 <Figure
 	src="/images/kinlink/results.svg"
-	alt="Bar chart of recall: exact match on cleaned name and date of birth 28.3% at 99.4% precision; Kinlink auto-match 82.1% at 95.2% precision; Kinlink with review 91.5% at 79.1% precision before review"
+	alt="Bar chart of recall: exact match on cleaned name and date of birth 28.3% at 99.4% precision; Kinlink auto-match 82.2% at 95.2% precision; Kinlink with review 91.5% at 78.9% precision before review"
 	caption="The baseline already cleans names and parses dates; it just can't tolerate any difference."
 	wide
 />
@@ -112,10 +112,27 @@ On 10,000 synthetic people with 13,717 records and 4,468 true duplicate pairs, l
 | Method | Pairs flagged | Precision | Recall |
 |---|---:|---:|---:|
 | Exact match on cleaned name and date of birth | 1,273 | 99.4% | 28.3% |
-| Kinlink, auto-match (≥ 0.99) | 3,850 | 95.2% | 82.1% |
-| Kinlink, auto-match + review (≥ 0.80) | 5,166 | 79.1% | 91.5% |
+| Kinlink, auto-match (≥ 0.99) | 3,857 | 95.2% | 82.2% |
+| Kinlink, auto-match + review (≥ 0.80) | 5,186 | 78.9% | 91.5% |
 
 The careful spreadsheet approach is precise but finds barely a quarter of the duplicates. Kinlink finds four in five without anyone looking, and nine in ten once a reviewer works through the uncertain band.
+
+## A million records on a small machine
+
+National registries are not 10,000 people. Our first version compared candidate pairs all at once, and 138,000 records needed about 10 GB of memory. Kinlink now takes a memory limit (`memory_limit: 600MB` in the project file, or `--memory-limit`). It learns the model once from a sample of up to 200,000 records, then splits the records into parts that fit and compares each part, and each pair of parts, with the same model. The pairs and scores are exactly the ones a single run would give. A blocking rule that would make too many candidate pairs, such as "a shared name sound and the same birth year" across a million people, is narrowed with the village, the full birth date, or the whole name, and the run reports it.
+
+The same synthetic generator at four sizes, with a 600 MB limit, on a laptop:
+
+| Records | True pairs | Time | Auto-match precision | Auto-match recall | With review: recall |
+|---:|---:|---:|---:|---:|---:|
+| 1,374 | 456 | 1.1 s | 94.8% | 79.2% | 93.0% |
+| 13,717 | 4,468 | 2.7 s | 95.2% | 82.2% | 91.5% |
+| 137,972 | 45,978 | 12.2 s | 96.5% | 78.3% | 83.9% |
+| 1,007,926 | 336,482 | 141 s | 95.1% | 73.6% | 81.4% |
+
+The million-record run fits in a 1.5 GB container: the link itself peaked at 1.04 GB. The 138,000-record run that needed 10 GB now takes 12 seconds.
+
+Precision holds at about 95% at every size, but recall falls as the population grows, and we spent some time making sure we understood why. It isn't the narrowed rules: only 3% of true pairs reach no rule, at 138,000 records and at a million alike. The drop is in the scores. In a population of a million, many more different people share a village, a birth year and a similar name, so two records that agree only on those are honestly less likely to be the same person, and fall below the auto-match line. What lifts them is more evidence, like a phone, an ID card, a full birth date or household details, not looser rules. Every number here comes from `python benchmarks/run.py`, so you can check it.
 
 ## What the mistakes taught us
 

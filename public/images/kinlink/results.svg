@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 470" role="img" aria-label="Bar chart. Exact match on cleaned name and date of birth: precision 99.4 percent, recall 28.3 percent. Kinlink auto-match: precision 95.2 percent, recall 82.1 percent. Kinlink with review: precision 79.1 percent, recall 91.5 percent.">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 470" role="img" aria-label="Bar chart. Exact match on cleaned name and date of birth: precision 99.4 percent, recall 28.3 percent. Kinlink auto-match: precision 95.2 percent, recall 82.2 percent. Kinlink with review: precision 78.9 percent, recall 91.5 percent.">
 <style>
   .bg{fill:#ffffff}.box{fill:#f5f7fa;stroke:#d5dce6;stroke-width:1.5}.hl{fill:#e8effd;stroke:#2463e3;stroke-width:1.5}.warm{fill:#fff3ea;stroke:#f07316;stroke-width:1.5}
   .t{font:600 19px Inter,system-ui,sans-serif;fill:#132847}.s{font:400 15px Inter,system-ui,sans-serif;fill:#53637a}.k{font:600 12px ui-monospace,Menlo,monospace;letter-spacing:.08em;fill:#f07316}
@@ -22,11 +22,11 @@
 <text class="t" x="630" y="120">28.3%</text><text class="s" x="700" y="120">precision 99.4%</text>
 <text class="t" x="40" y="206">Kinlink</text><text class="s" x="40" y="230">auto-match, no review</text>
 <rect class="b2" x="400" y="180" width="624" height="54" rx="6"/>
-<text class="t" x="1038" y="214">82.1%</text>
+<text class="t" x="1038" y="214">82.2%</text>
 <text class="s" x="420" y="214" style="fill:#fff">precision 95.2%</text>
 <text class="t" x="40" y="300">Kinlink + review</text><text class="s" x="40" y="324">pairs from 0.80 checked by a person</text>
 <rect class="b3" x="400" y="274" width="695" height="54" rx="6"/>
 <text class="t" x="1106" y="308">91.5%</text>
-<text class="s" x="420" y="308" style="fill:#fff">precision 79.1% before review</text>
+<text class="s" x="420" y="308" style="fill:#fff">precision 78.9% before review</text>
 <text class="s" x="40" y="430">Precision is the share of flagged pairs that really are the same person. Review-band pairs are checked by a person before anything happens.</text>
 </svg>
