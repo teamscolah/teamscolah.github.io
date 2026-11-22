@@ -1,6 +1,6 @@
 ---
 title: 'Seeing inside Scolah: OpenTelemetry, Prometheus, Loki, Tempo and Grafana'
-description: 'How we observe services in our cloud and agents on customer servers with one OpenTelemetry pipeline, the traps that failed silently on us, and why Grafana Alloy is next.'
+description: 'How we observe services in our cloud and agents on customer servers with one OpenTelemetry pipeline and Grafana Alloy, and the traps that failed silently on us.'
 pubDate: '2026-11-22'
 heroImage: '../../assets/blog/observability/server-room.jpg'
 heroAlt: 'Server racks with patch cables in a server room'
@@ -28,7 +28,7 @@ We standardised on **OpenTelemetry (OTLP)** as the only wire format our own code
 
 <Figure
 	src="/images/observability/pipeline.svg"
-	alt="Diagram: backend services and server agents send OTLP to an OpenTelemetry Collector, which fans out metrics to Prometheus, logs to Loki and traces to Tempo. Promtail ships pod stdout to Loki. Grafana reads all three and Prometheus drives Alertmanager."
+	alt="Diagram: backend services and server agents send OTLP to an OpenTelemetry Collector, which fans out metrics to Prometheus, logs to Loki and traces to Tempo. Grafana Alloy ships pod stdout to Loki. Grafana reads all three and Prometheus drives Alertmanager."
 	caption="The pipeline today. Blue paths are OTLP; grey paths are everything else."
 	wide
 />
@@ -134,18 +134,11 @@ We now have a test that asserts a ServiceMonitor’s selector is a subset of the
 
 A Helm chart declared its container port, Service and probes on one port while the application listened on another. The probes could never pass and the scrape could never succeed. Whenever we add a chart now, we check that the Service port, target port and all three probe ports match the port the app actually listens on.
 
-## What’s next: Grafana Alloy
+## Container logs with Grafana Alloy
 
-Today, logs reach Loki two ways: OTLP from our own code through the collector, and Promtail tailing container stdout for everything else. Promtail is deprecated upstream in favour of **Grafana Alloy**, so we are moving.
+Not everything speaks OTLP. Third-party components, sidecars and anything that just writes to stdout still need their logs in Loki. For those we run **Grafana Alloy** as a DaemonSet: it discovers pods through the Kubernetes API, tails their container logs and pushes them to Loki with the same labels our OTLP logs use, so one query covers both.
 
-<Figure
-	src="/images/observability/alloy-next.svg"
-	alt="Diagram: today Promtail and the OpenTelemetry Collector both feed Loki; next, Grafana Alloy first replaces Promtail for pod logs and then may receive OTLP too"
-	caption="Two steps. Applications and agents don’t change in either."
-	wide
-/>
-
-**Step 1: Alloy replaces Promtail** for Kubernetes pod logs. The Alloy version of what Promtail does for us is small:
+The core of it is small:
 
 ```hcl
 discovery.kubernetes "pods" {
@@ -164,9 +157,20 @@ loki.write "default" {
 }
 ```
 
-The plan is to run both side by side, compare line counts per namespace in Loki, and only then remove Promtail.
+Alloy’s component model is what sold us. Each block is a typed component with explicit inputs and outputs, so the config reads like the pipeline diagram above rather than a wall of relabelling rules, and you can inspect every component’s live state in its built-in UI.
 
-**Step 2: maybe, one agent.** Alloy ships OpenTelemetry components (`otelcol.receiver.otlp`, `otelcol.exporter.*`), so it could also take over the standalone collector’s job. We will only do that if it matches the collector on our real traffic. Either way the contract with our applications and agents doesn’t change: they speak plain OTLP, and what sits behind the endpoint is our business.
+## What’s next: one agent
+
+Today Alloy handles container logs and a standalone OpenTelemetry Collector handles OTLP. Alloy also ships OpenTelemetry components (`otelcol.receiver.otlp`, `otelcol.exporter.*`), so it could take over the collector’s job too.
+
+<Figure
+	src="/images/observability/alloy-next.svg"
+	alt="Diagram: today Grafana Alloy collects container logs and an OpenTelemetry Collector receives OTLP; next, Alloy may do both"
+	caption="Applications and agents don’t change either way."
+	wide
+/>
+
+We will only make that switch if Alloy matches the collector on our real traffic. Either way the contract with our applications and agents doesn’t change: they speak plain OTLP, and what sits behind the endpoint is our business.
 
 ## Takeaways
 

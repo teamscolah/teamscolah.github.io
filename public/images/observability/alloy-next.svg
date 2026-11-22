@@ -1,37 +1,36 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400" role="img" aria-label="Today Promtail and the OpenTelemetry Collector run side by side; next, Grafana Alloy takes over log collection">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 380" role="img" aria-label="Today Grafana Alloy collects container logs and an OpenTelemetry Collector receives OTLP; next, Alloy may do both">
 <style>
-  .bg{fill:#ffffff}.box{fill:#f5f7fa;stroke:#d5dce6;stroke-width:1.5}.hl{fill:#e8effd;stroke:#2463e3;stroke-width:1.5}.warm{fill:#fff3ea;stroke:#f07316;stroke-width:1.5}
+  .bg{fill:#ffffff}.box{fill:#f5f7fa;stroke:#d5dce6;stroke-width:1.5}.hl{fill:#e8effd;stroke:#2463e3;stroke-width:1.5}
   .t{font:600 19px Inter,system-ui,sans-serif;fill:#132847}.s{font:400 15px Inter,system-ui,sans-serif;fill:#53637a}.k{font:600 12px ui-monospace,Menlo,monospace;letter-spacing:.08em;fill:#f07316}
   .ln{stroke:#8a99ad;stroke-width:1.8;fill:none}.lb{stroke:#2463e3;stroke-width:2;fill:none}.mk{fill:#8a99ad}.mkb{fill:#2463e3}
-  @media (prefers-color-scheme: dark){.bg{fill:#0c1626}.box{fill:#122035;stroke:#2a3c5c}.hl{fill:#16294a;stroke:#6f9bff}.warm{fill:#2a1d14;stroke:#ff8a3d}.t{fill:#e8edf5}.s{fill:#a3b1c6}.k{fill:#ff8a3d}.ln{stroke:#5d6f8a}.mk{fill:#5d6f8a}.lb{stroke:#6f9bff}.mkb{fill:#6f9bff}}
+  @media (prefers-color-scheme: dark){.bg{fill:#0c1626}.box{fill:#122035;stroke:#2a3c5c}.hl{fill:#16294a;stroke:#6f9bff}.t{fill:#e8edf5}.s{fill:#a3b1c6}.k{fill:#ff8a3d}.ln{stroke:#5d6f8a}.mk{fill:#5d6f8a}.lb{stroke:#6f9bff}.mkb{fill:#6f9bff}}
 </style>
 <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" class="mk"/></marker><marker id="b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" class="mkb"/></marker></defs>
-<rect class="bg" width="1200" height="400"/>
+<rect class="bg" width="1200" height="380"/>
 <text class="k" x="40" y="56">TODAY</text>
-<rect class="box" x="40" y="76" width="240" height="90" rx="14"/>
-<text class="t" x="62" y="114">Promtail</text>
-<text class="s" x="62" y="142">pod logs, own config</text>
-<rect class="box" x="40" y="186" width="240" height="90" rx="14"/>
+<rect class="hl" x="40" y="76" width="250" height="90" rx="14"/>
+<text class="t" x="62" y="114">Grafana Alloy</text>
+<text class="s" x="62" y="142">container logs</text>
+<rect class="box" x="40" y="186" width="250" height="90" rx="14"/>
 <text class="t" x="62" y="224">OTel Collector</text>
 <text class="s" x="62" y="252">OTLP from apps + agents</text>
-<path class="ln" d="M280 121 C330 121 330 176 378 176" marker-end="url(#a)"/>
-<path class="ln" d="M280 231 C330 231 330 186 378 186" marker-end="url(#a)"/>
-<rect class="box" x="380" y="136" width="180" height="90" rx="14"/>
-<text class="t" x="402" y="174">Loki</text>
-<text class="s" x="402" y="202">two log paths</text>
-<path class="ln" d="M600 181 H660" marker-end="url(#a)"/>
+<path class="ln" d="M290 121 C340 121 340 166 388 166" marker-end="url(#a)"/>
+<path class="ln" d="M290 231 C340 231 340 186 388 186" marker-end="url(#a)"/>
+<rect class="box" x="390" y="116" width="180" height="120" rx="14"/>
+<text class="t" x="412" y="154">Loki</text>
+<text class="t" x="412" y="184">Prometheus</text>
+<text class="t" x="412" y="214">Tempo</text>
+<path class="ln" d="M600 176 H660" marker-end="url(#a)"/>
 <text class="k" x="680" y="56">NEXT</text>
-<rect class="hl" x="680" y="76" width="260" height="200" rx="16"/>
-<text class="t" x="704" y="118">Grafana Alloy</text>
-<text class="s" x="704" y="150">step 1: discover pods and</text>
-<text class="s" x="704" y="174">tail logs (Promtail retires)</text>
-<text class="s" x="704" y="214">step 2: receive OTLP with its</text>
-<text class="s" x="704" y="238">OpenTelemetry components</text>
+<rect class="hl" x="680" y="96" width="260" height="160" rx="16"/>
+<text class="t" x="704" y="140">Grafana Alloy</text>
+<text class="s" x="704" y="174">container logs, plus OTLP</text>
+<text class="s" x="704" y="200">through its OpenTelemetry</text>
+<text class="s" x="704" y="226">components: one agent</text>
 <path class="lb" d="M940 176 H1000" marker-end="url(#b)"/>
-<rect class="box" x="1002" y="96" width="160" height="160" rx="14"/>
-<text class="t" x="1024" y="140">Loki</text>
-<text class="t" x="1024" y="180">Prometheus</text>
-<text class="t" x="1024" y="220">Tempo</text>
-<text class="s" x="40" y="340">Promtail is deprecated upstream, so step 1 is not optional. Step 2 happens only if Alloy</text>
-<text class="s" x="40" y="366">matches the collector on our real traffic; apps and agents keep speaking plain OTLP either way.</text>
+<rect class="box" x="1002" y="116" width="160" height="120" rx="14"/>
+<text class="t" x="1024" y="154">Loki</text>
+<text class="t" x="1024" y="184">Prometheus</text>
+<text class="t" x="1024" y="214">Tempo</text>
+<text class="s" x="40" y="330">Only if Alloy matches the collector on real traffic. Apps and agents keep speaking plain OTLP either way.</text>
 </svg>
