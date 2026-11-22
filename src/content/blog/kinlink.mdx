@@ -15,7 +15,7 @@ import csvUpload from '../../assets/blog/kinlink/csv-upload.png';
 
 In [our first post](/blog/why-we-built-scolah/) we described a household registered by a cash transfer, a school-feeding scheme and an NGO, three times, three different ways. Today we are introducing **[Kinlink](https://github.com/teamscolah/kinlink)**, an open-source tool for exactly that problem. It reads each programme's data where it already lives, works out which records are the same person, explains why, and gives reviewers a page to confirm or reject each match.
 
-Kinlink is a prototype. It works end to end, but it hasn't met a real registry yet. This post covers how it works, how we tested it, and the mistakes that taught us the most.
+Kinlink is open source and works on its own: any programme, registry or organisation can run it on its data, with or without other tools around it. This post covers how it works, how we tested it, and the mistakes that taught us the most.
 
 ## The problem, in three records
 
@@ -167,7 +167,7 @@ Many programmes don't have a database at all, just monthly spreadsheets. So an a
 
 ## What's next
 
-Kinlink is a prototype, and the README is explicit about its limits. Next on the list:
+The README is explicit about Kinlink's current limits. Next on the list:
 
 1. **Login and roles** before the page goes anywhere near a network. Today it only listens on localhost.
 2. **Incremental runs** that compare only new and changed records.
