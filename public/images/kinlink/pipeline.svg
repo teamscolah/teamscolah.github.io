@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 420" role="img" aria-label="Kinlink pipeline: sources are read, each field is standardised by its type, candidate pairs are found by blocking, pairs are scored, then auto-matched or sent to review">
+<style>
+  .bg{fill:#ffffff}.box{fill:#f5f7fa;stroke:#d5dce6;stroke-width:1.5}.hl{fill:#e8effd;stroke:#2463e3;stroke-width:1.5}.warm{fill:#fff3ea;stroke:#f07316;stroke-width:1.5}
+  .t{font:600 19px Inter,system-ui,sans-serif;fill:#132847}.s{font:400 15px Inter,system-ui,sans-serif;fill:#53637a}.k{font:600 12px ui-monospace,Menlo,monospace;letter-spacing:.08em;fill:#f07316}
+  .ln{stroke:#8a99ad;stroke-width:1.8;fill:none}.lb{stroke:#2463e3;stroke-width:2;fill:none}.mk{fill:#8a99ad}.mkb{fill:#2463e3}
+  .b1{fill:#b8c3d4}.b2{fill:#2463e3}.b3{fill:#f07316}.grid{stroke:#e3e8ef;stroke-width:1}
+  @media (prefers-color-scheme: dark){.bg{fill:#0c1626}.box{fill:#122035;stroke:#2a3c5c}.hl{fill:#16294a;stroke:#6f9bff}.warm{fill:#2a1d14;stroke:#ff8a3d}.t{fill:#e8edf5}.s{fill:#a3b1c6}.k{fill:#ff8a3d}.ln{stroke:#5d6f8a}.mk{fill:#5d6f8a}.lb{stroke:#6f9bff}.mkb{fill:#6f9bff}.b1{fill:#4a5a72}.b2{fill:#6f9bff}.b3{fill:#ff8a3d}.grid{stroke:#243552}}
+</style>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" class="mk"/></marker><marker id="b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" class="mkb"/></marker></defs>
+<rect class="bg" width="1200" height="420"/>
+<text class="k" x="30" y="50">READ</text>
+<rect class="box" x="30" y="70" width="190" height="62" rx="12"/><text class="t" x="50" y="108">CSV / Excel</text>
+<rect class="box" x="30" y="148" width="190" height="62" rx="12"/><text class="t" x="50" y="186">MySQL</text>
+<rect class="box" x="30" y="226" width="190" height="62" rx="12"/><text class="t" x="50" y="264">MongoDB</text>
+<path class="ln" d="M220 101 C250 101 250 170 278 170" marker-end="url(#a)"/>
+<path class="ln" d="M220 179 H278" marker-end="url(#a)"/>
+<path class="ln" d="M220 257 C250 257 250 188 278 188" marker-end="url(#a)"/>
+<text class="k" x="280" y="50">STANDARDISE</text>
+<rect class="hl" x="280" y="70" width="210" height="218" rx="14"/>
+<text class="t" x="300" y="108">By field type</text>
+<text class="s" x="300" y="140">names: order, spellings,</text>
+<text class="s" x="300" y="162">  honorifics, sounds</text>
+<text class="s" x="300" y="190">dates: formats, 1 Jan,</text>
+<text class="s" x="300" y="212">  estimated ages</text>
+<text class="s" x="300" y="240">phones: +233, Excel</text>
+<text class="s" x="300" y="268">ids, places, categories</text>
+<path class="lb" d="M490 179 H538" marker-end="url(#b)"/>
+<text class="k" x="540" y="50">BLOCK</text>
+<rect class="box" x="540" y="70" width="190" height="218" rx="14"/>
+<text class="t" x="560" y="108">Candidate pairs</text>
+<text class="s" x="560" y="140">same phone</text>
+<text class="s" x="560" y="164">same ID</text>
+<text class="s" x="560" y="188">a shared name sound</text>
+<text class="s" x="560" y="210">  + birth year</text>
+<text class="s" x="560" y="234">a shared name sound</text>
+<text class="s" x="560" y="256">  + village</text>
+<path class="lb" d="M730 179 H778" marker-end="url(#b)"/>
+<text class="k" x="780" y="50">SCORE</text>
+<rect class="hl" x="780" y="70" width="190" height="218" rx="14"/>
+<text class="t" x="800" y="108">Fellegi–Sunter</text>
+<text class="s" x="800" y="140">weights learned</text>
+<text class="s" x="800" y="164">by EM, per dataset</text>
+<text class="s" x="800" y="196">common values</text>
+<text class="s" x="800" y="218">  count for less</text>
+<text class="s" x="800" y="250">every field explained</text>
+<path class="lb" d="M970 140 C1000 140 1000 110 1018 110" marker-end="url(#b)"/>
+<path class="ln" d="M970 220 C1000 220 1000 250 1018 250" marker-end="url(#a)"/>
+<rect class="hl" x="1020" y="70" width="160" height="80" rx="14"/>
+<text class="t" x="1040" y="104">Auto-match</text>
+<text class="s" x="1040" y="130">≥ 0.99</text>
+<rect class="warm" x="1020" y="208" width="160" height="80" rx="14"/>
+<text class="t" x="1040" y="242">Review page</text>
+<text class="s" x="1040" y="268">0.80 – 0.99</text>
+<text class="s" x="30" y="350">Kinlink only reads the source. Results, explanations and review decisions live in Kinlink's own store,</text>
+<text class="s" x="30" y="376">and a pair marked "not the same" is never flagged again.</text>
+</svg>

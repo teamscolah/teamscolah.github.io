@@ -1,0 +1,180 @@
+---
+title: 'Kinlink: finding the same person across social protection programmes'
+description: 'An open-source tool that matches beneficiaries across programmes, even when every programme wrote them down differently. How it works, how we tested it on synthetic Ghanaian records, and what the mistakes taught us.'
+pubDate: '2026-11-23'
+heroImage: '../../assets/blog/kinlink/budget-meeting.jpg'
+heroAlt: 'Three people going through papers and reports at a table'
+heroCredit: 'Photo by Gylain Omer on <a href="https://unsplash.com/photos/aXFf65_xtTA">Unsplash</a>'
+tags: ['Open source', 'Engineering']
+---
+
+import Figure from '../../components/Figure.astro';
+import pairView from '../../assets/blog/kinlink/pair-view.png';
+import reviewQueue from '../../assets/blog/kinlink/review-queue.png';
+import csvUpload from '../../assets/blog/kinlink/csv-upload.png';
+
+In [our first post](/blog/why-we-built-scolah/) we described a household registered by a cash transfer, a school-feeding scheme and an NGO, three times, three different ways. Today we are introducing **[Kinlink](https://github.com/teamscolah/kinlink)**, an open-source tool for exactly that problem. It reads each programme's data where it already lives, works out which records are the same person, explains why, and gives reviewers a page to confirm or reject each match.
+
+Kinlink is a prototype. It works end to end, but it hasn't met a real registry yet. This post covers how it works, how we tested it, and the mistakes that taught us the most.
+
+## The problem, in three records
+
+| Programme | Name | Date of birth | Phone | Village |
+|---|---|---|---|---|
+| Cash transfer | Joyce Osei | 17/10/2009 | 0267380052 | Kakumdo |
+| NGO nutrition | Osei Ama Joyce | 01-Jan-09 | 233267380052 | Kakumdo |
+| School feeding | JOYCE AMA OSEI | 2009-10-17 | +233 26 738 0052 | Kakumdo |
+
+A person sees one girl at once. A computer comparing strings sees three strangers:
+- the names are in a different order, and two of them include a middle name;
+- the dates are written three ways, and one is the 1 January placeholder typed when the real date is unknown;
+- the phone number is written three ways.
+
+Real data is worse. Excel turns phone numbers into `2.33267E+11`, and two-digit years are ambiguous.
+
+## What Kinlink does
+
+<Figure
+	src="/images/kinlink/pipeline.svg"
+	alt="Diagram: CSV, MySQL and MongoDB sources are read, each field is standardised by type, candidate pairs are found by blocking, pairs are scored with Fellegi–Sunter weights, then either auto-matched or sent to the review page"
+	caption="Read, standardise, block, score, then decide automatically only when the evidence is strong."
+	wide
+/>
+
+**It reads data where it is.** CSV files, including Excel exports with odd encodings and semicolon separators, plus MySQL and MongoDB. It only ever reads, and only the columns you configure.
+
+**Every programme describes its own fields.** No two programmes collect the same data, so there is no fixed schema. A small YAML file lists the fields and gives each one a type:
+
+```yaml
+source:
+  type: mysql
+  url: ${REGISTRY_URL}        # secrets come from the environment
+  table: beneficiaries
+  id: beneficiary_id
+
+fields:
+  - name: name
+    type: person_name
+    from: [first_name, other_names, surname]
+    languages: [ak, ha, en]
+  - name: birth
+    type: birth_date
+    from: date_of_birth
+    formats: ["%d/%m/%Y", "%Y-%m-%d", "%d-%b-%y"]
+    age_column: age
+  - name: phone
+    type: phone
+    from: phone
+    country_code: "233"
+  - name: village
+    type: category
+    from: village
+```
+
+The type does the work:
+- **`person_name`** ignores word order, drops honorifics like *Nana* and *Alhaji*, and maps spellings to one name from per-language tables: *Kweku/Kwaku*, *Kodwo/Kojo*, *Esi/Akosua*, *Muhammad/Mohammed*. It also reduces each word to a sound key, so *Mensah* and *Mensa* agree.
+- **`birth_date`** reads several formats. It treats 1 January and dates that appear suspiciously often as "year only", and turns an estimated age into a birth year.
+- **`phone`** converts every format to an international number and treats Excel's scientific notation as a number that has lost its digits.
+
+**It learns weights from your data.** For scoring we build on [Splink](https://github.com/moj-analytical-services/splink), the UK Ministry of Justice's record-linkage library. It implements the Fellegi–Sunter model: for every field it learns how much each kind of agreement says about two records being one person, using expectation maximisation on the dataset itself. Add a field and there's nothing to hand-tune. Term-frequency adjustment means a common name, or a phone number many records share, counts for less than a rare one.
+
+**It explains everything, and lets people decide the hard cases.** Pairs above 0.99 are matched automatically. Pairs from 0.80 to 0.99 go to a review page.
+
+<Figure
+	src={pairView}
+	alt="Kinlink pair view: two records side by side with differences highlighted, a bar chart of how each field moved the score, and buttons for Same person, Not the same and Unsure"
+	caption="Reversed name order, a placeholder birth date, two phone formats and even a data-entry error in sex, and the reasons are on the page."
+	wide
+/>
+
+## Testing it without anyone's data
+
+We will never put real beneficiary data in a public repository, so Kinlink ships a generator of **synthetic Ghanaian records**. Being realistic mattered more than being large:
+
+- **Real naming conventions.** Akan and Ewe children get the day name of the weekday they were born: Kwame on a Saturday, Akosua on a Sunday. Northern names follow Hausa and Dagbani spellings of Arabic names. Ga names keep their *Nii* and *Naa*.
+- **Households.** Families share a surname, a village and, most of the time, the caregiver's phone, which ends up on the children's records too.
+- **Three programmes, three habits.** One writes `17/10/2009` and `0267380052`, one `2009-10-17` in capitals with `+233 26 738 0052`, and one `17-Oct-09` with numbers that Excel sometimes mangled.
+- **The usual errors.** Placeholder dates, estimated ages, nicknames, Twi versus Fante spellings, typos, missing values and changed SIM cards.
+
+Every record carries the true person id, so a run can be scored exactly. `kinlink generate`, `kinlink link` and `kinlink evaluate` do the whole loop in under a minute.
+
+## Results
+
+On 10,000 synthetic people with 13,717 records and 4,468 true duplicate pairs, linking takes about five seconds on a laptop:
+
+<Figure
+	src="/images/kinlink/results.svg"
+	alt="Bar chart of recall: exact match on cleaned name and date of birth 28.3% at 99.4% precision; Kinlink auto-match 82.1% at 95.2% precision; Kinlink with review 91.5% at 79.1% precision before review"
+	caption="The baseline already cleans names and parses dates; it just can't tolerate any difference."
+	wide
+/>
+
+| Method | Pairs flagged | Precision | Recall |
+|---|---:|---:|---:|
+| Exact match on cleaned name and date of birth | 1,273 | 99.4% | 28.3% |
+| Kinlink, auto-match (≥ 0.99) | 3,850 | 95.2% | 82.1% |
+| Kinlink, auto-match + review (≥ 0.80) | 5,166 | 79.1% | 91.5% |
+
+The careful spreadsheet approach is precise but finds barely a quarter of the duplicates. Kinlink finds four in five without anyone looking, and nine in ten once a reviewer works through the uncertain band.
+
+## What the mistakes taught us
+
+Our first run reached 92% precision and 70% recall. These are the changes that moved it, and every one was a *data* lesson rather than a modelling trick.
+
+### Don't learn what a match looks like from shared phones
+
+Expectation maximisation needs a pool of candidate pairs to learn from. Our first version trained on pairs that shared a phone number, and in Ghanaian households a shared phone usually means *relative*, not *same person*. The model concluded that a different date of birth barely mattered.
+
+We now rank the training pools. Pairs that share an ID card come first, then pairs that share a name and a birth year, and phone-only pairs last. Recall at auto-match went from about 70% to 81% with no change in precision.
+
+### A shared household phone is weaker evidence than a rare one
+
+Most remaining false matches were two people in one household: a father and son both called Kwaku Frimpong, or sisters with the same day name. They share a surname, a village and a phone. Term-frequency adjustment on phone numbers and full names, so that a number on six records counts for less than a number on one, took precision from about 92% to about 95%.
+
+### Check that your synthetic data isn't lying to you
+
+Our generator first drew each child's English name independently, so siblings often got identical full names, which parents don't do. Same-named siblings do happen with day names, but families add a distinguishing name. Fixing the generator made the benchmark more realistic. It didn't flatter the model: the hard cases that remain are real ones.
+
+### Make the baseline fair
+
+Our first baseline compared names and dates as raw text. It found almost nothing, because each programme formats dates differently. That made Kinlink look great and taught us nothing. The baseline in the table cleans names and parses dates first, which is what a careful analyst would actually do.
+
+### The hard case is the household
+
+Fellegi–Sunter assumes fields are independent. Within a household they aren't: the same phone, surname and village arrive together. The remaining errors are almost all relatives, and they land in the review band, which is where they belong. Comparing correlated fields jointly is our next accuracy improvement.
+
+## The review page
+
+The review page is part of the open-source tool, because a matching engine without one isn't much use to a programme.
+
+<Figure
+	src={reviewQueue}
+	alt="Kinlink review queue listing candidate pairs with their scores and the reasons each field agreed or disagreed"
+	caption="The queue: highest score first, with every field's verdict at a glance."
+	wide
+/>
+
+Reviewers mark a pair *Same person*, *Not the same* or *Unsure*, with a note. A pair marked *Not the same* is never flagged again, and every decision records when it was made.
+
+Many programmes don't have a database at all, just monthly spreadsheets. So an admin can **upload a CSV** on the page. Kinlink detects the encoding and separator, reports rows it couldn't read with line numbers, shows the first rows, and asks which column is which. Next month's file with the same columns needs no mapping.
+
+<Figure
+	src={csvUpload}
+	alt="Kinlink CSV upload page showing detected encoding and separator, a row that could not be read, a preview of the first rows and drop-downs to match the file's columns"
+	caption="An Excel export with semicolons and its own column names, mapped in a minute."
+	wide
+/>
+
+## What's next
+
+Kinlink is a prototype, and the README is explicit about its limits. Next on the list:
+
+1. **Login and roles** before the page goes anywhere near a network. Today it only listens on localhost.
+2. **Incremental runs** that compare only new and changed records.
+3. **Household linkage,** matching whole households as well as people.
+4. **Linking across agencies without sharing personal data,** using keyed Bloom-filter encodings.
+5. **Joint comparisons** for correlated fields like phone and village.
+
+The most valuable contributions don't need any Python. Kinlink's name rules are [plain YAML](https://github.com/teamscolah/kinlink/tree/main/src/kinlink/rules): honorifics and spelling variants per language. We ship Akan (Twi and Fante), northern Ghanaian and English tables. Ewe, Ga, Dagbani, Yoruba and Swahili would each make it better for millions of people, and each needs a native speaker to review it.
+
+Kinlink is [on GitHub](https://github.com/teamscolah/kinlink) under the Apache 2.0 licence. If you run a registry, a programme or an MIS and this problem looks familiar, [we would love to hear from you](https://github.com/teamscolah).

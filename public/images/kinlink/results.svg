@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 470" role="img" aria-label="Bar chart. Exact match on cleaned name and date of birth: precision 99.4 percent, recall 28.3 percent. Kinlink auto-match: precision 95.2 percent, recall 82.1 percent. Kinlink with review: precision 79.1 percent, recall 91.5 percent.">
+<style>
+  .bg{fill:#ffffff}.box{fill:#f5f7fa;stroke:#d5dce6;stroke-width:1.5}.hl{fill:#e8effd;stroke:#2463e3;stroke-width:1.5}.warm{fill:#fff3ea;stroke:#f07316;stroke-width:1.5}
+  .t{font:600 19px Inter,system-ui,sans-serif;fill:#132847}.s{font:400 15px Inter,system-ui,sans-serif;fill:#53637a}.k{font:600 12px ui-monospace,Menlo,monospace;letter-spacing:.08em;fill:#f07316}
+  .ln{stroke:#8a99ad;stroke-width:1.8;fill:none}.lb{stroke:#2463e3;stroke-width:2;fill:none}.mk{fill:#8a99ad}.mkb{fill:#2463e3}
+  .b1{fill:#b8c3d4}.b2{fill:#2463e3}.b3{fill:#f07316}.grid{stroke:#e3e8ef;stroke-width:1}
+  @media (prefers-color-scheme: dark){.bg{fill:#0c1626}.box{fill:#122035;stroke:#2a3c5c}.hl{fill:#16294a;stroke:#6f9bff}.warm{fill:#2a1d14;stroke:#ff8a3d}.t{fill:#e8edf5}.s{fill:#a3b1c6}.k{fill:#ff8a3d}.ln{stroke:#5d6f8a}.mk{fill:#5d6f8a}.lb{stroke:#6f9bff}.mkb{fill:#6f9bff}.b1{fill:#4a5a72}.b2{fill:#6f9bff}.b3{fill:#ff8a3d}.grid{stroke:#243552}}
+</style>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" class="mk"/></marker><marker id="b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" class="mkb"/></marker></defs>
+<rect class="bg" width="1200" height="470"/>
+<text class="k" x="40" y="44">SHARE OF TRUE DUPLICATES FOUND (RECALL) · 13,717 SYNTHETIC RECORDS</text>
+<g>
+  <line class="grid" x1="400" y1="66" x2="400" y2="360"/><line class="grid" x1="590" y1="66" x2="590" y2="360"/>
+  <line class="grid" x1="780" y1="66" x2="780" y2="360"/><line class="grid" x1="970" y1="66" x2="970" y2="360"/>
+  <line class="grid" x1="1160" y1="66" x2="1160" y2="360"/>
+  <text class="s" x="400" y="384" text-anchor="middle">0%</text><text class="s" x="590" y="384" text-anchor="middle">25%</text>
+  <text class="s" x="780" y="384" text-anchor="middle">50%</text><text class="s" x="970" y="384" text-anchor="middle">75%</text>
+  <text class="s" x="1160" y="384" text-anchor="middle">100%</text>
+</g>
+<text class="t" x="40" y="112">Exact match</text><text class="s" x="40" y="136">cleaned name + date of birth</text>
+<rect class="b1" x="400" y="86" width="215" height="54" rx="6"/>
+<text class="t" x="630" y="120">28.3%</text><text class="s" x="700" y="120">precision 99.4%</text>
+<text class="t" x="40" y="206">Kinlink</text><text class="s" x="40" y="230">auto-match, no review</text>
+<rect class="b2" x="400" y="180" width="624" height="54" rx="6"/>
+<text class="t" x="1038" y="214">82.1%</text>
+<text class="s" x="420" y="214" style="fill:#fff">precision 95.2%</text>
+<text class="t" x="40" y="300">Kinlink + review</text><text class="s" x="40" y="324">pairs from 0.80 checked by a person</text>
+<rect class="b3" x="400" y="274" width="695" height="54" rx="6"/>
+<text class="t" x="1106" y="308">91.5%</text>
+<text class="s" x="420" y="308" style="fill:#fff">precision 79.1% before review</text>
+<text class="s" x="40" y="430">Precision is the share of flagged pairs that really are the same person. Review-band pairs are checked by a person before anything happens.</text>
+</svg>
