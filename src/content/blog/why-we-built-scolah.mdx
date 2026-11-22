@@ -1,0 +1,87 @@
+---
+title: 'Why we built Scolah'
+description: 'A child’s day should not live in a group chat, and a family’s support should not live in three spreadsheets. Here is the problem we set out to fix, and the engineering choices that came out of it.'
+pubDate: '2026-11-21'
+heroImage: '../../assets/blog/why-we-built-scolah/children-walking-to-school.jpg'
+heroAlt: 'A line of children in school uniforms walking along a road'
+heroCredit: 'Photo by CLINTON MWEBAZE on <a href="https://unsplash.com/photos/mdtPpluokWE">Unsplash</a>'
+tags: ['Company', 'Product']
+---
+
+import Figure from '../../components/Figure.astro';
+import classroom from '../../assets/blog/why-we-built-scolah/classroom-young.jpg';
+import fieldWorkers from '../../assets/blog/why-we-built-scolah/field-workers-phone.jpg';
+
+Welcome to the Scolah engineering blog. Before we write about Loki labels and offline sync, here is why any of this exists.
+
+## It started with a child’s day
+
+Ask a parent how their child’s day at nursery went and the answer is usually somewhere in a class WhatsApp group. It sits between two hundred other messages, a few blurry photos and a reminder about fees. A temperature gets mentioned at pick-up and forgotten. A note goes home in a bag and stays in the bag. A parent who missed a week has no way to catch up.
+
+Teachers have it worse. They type the same update into the group, repeat it at the gate, write it in a book, and then answer questions at nine in the evening.
+
+None of this is anyone’s fault. Group chats became the default because everyone already has one. They were just never built to hold a record of a child.
+
+So we built Scolah as **a calm record of the people a family looks after**. Families keep it at home, and it is free for them. When a school joins, what happens in class lands on the same timeline the family already keeps: arrivals, meals, naps, temperature, activities and photos. The teacher logs it once for the whole class, and every family sees their own child’s entry.
+
+<Figure
+	src={classroom}
+	alt="A teacher at a chalkboard with young pupils raising their hands"
+	caption='The school writes once, and every family reads its own child’s day. Photo by Elise Gaumier on <a href="https://unsplash.com/photos/NXGwIabbhSk">Unsplash</a>'
+/>
+
+## Then we met the same problem at a much larger scale
+
+While building for schools, we kept meeting the people who look after families when things are harder: social workers, case officers and the NGOs and government agencies that run social protection programmes.
+
+Their tools looked familiar. A paper intake form. A spreadsheet in three versions. A WhatsApp group for field updates. A payment ledger only the finance officer could read. None of them talk to each other.
+
+The stakes are higher. A household registered twice can be paid twice. When a caseworker leaves, months of visit notes can leave with them. And the gap is huge: the ILO estimates that [3.8 billion people](https://www.ilo.org/publications/flagship-reports/world-social-protection-report-2024-26-universal-social-protection-climate) still have no social protection at all.
+
+Most case management software assumes good connectivity, one office and cases that close in days. Social protection runs in villages without signal, with field officers who rarely see a desk, on cases that stay open for years.
+
+That became **Scolah Compass**. It is a social registry and case management system, and around it we built **Scolah Compass Resources** for budgets, grants and stock, **Scolah Compass Exchange** for moving data between Compass and the systems around it, and **Scolah Compass Platform** for running the whole suite on an agency’s own servers.
+
+<Figure
+	src={fieldWorkers}
+	alt="Two field workers checking their phones on a rural road"
+	caption='Field work happens where the signal is weakest, so the software has to work there first. Photo by Stephen Tettey Atsu on <a href="https://unsplash.com/photos/YozVLdi-9Pw">Unsplash</a>'
+/>
+
+## Two product families, one foundation
+
+Scolah and Scolah Compass serve very different people, but underneath they share a lot. That is deliberate.
+
+<Figure
+	src="/images/why-we-built-scolah/product-family.svg"
+	alt="Diagram: Scolah for families and schools, and the Scolah Compass suite for social protection programmes, both built on one sign-in, weak-signal support, three languages and a choice of hosted or self-hosted"
+	caption="Two product families on one shared foundation."
+	wide
+/>
+
+## The principles that shaped the engineering
+
+A few decisions came straight out of the problems above, and most of what we will write about here follows from them.
+
+**The record is the product.** For a family, that record is a child’s timeline. For a programme, it is a household, its cases, visits and payments. Everything else is a view onto that record. That pushed us towards append-only histories and audit trails early, because a record people rely on for years has to say what changed, when and by whom.
+
+**The network is the exception.** A visit is done when the field officer closes the app, not when they find signal that evening. Forms, photos, GPS points and signatures queue on the device and sync later, and conflicts are resolved and logged rather than thrown at the user.
+
+**Run it where the customer needs it.** Some customers want us to host everything. Ministries and large agencies often need the data to stay on servers they control. We ship the same suite both ways, which is why we build our own installer, an agent that runs on customer servers, signed application bundles and disaster recovery that customers can run themselves.
+
+**One identity, separate permissions.** People sign in once across the family, but each product keeps its own roles. Being a parent in one app gives you nothing in a case management system, and that boundary has to hold by construction, not by convention.
+
+**Built for the people who use it.** Everything ships in English, French and Brazilian Portuguese. The family app is free for families, and only schools pay.
+
+## What we will write about here
+
+This blog is where the team shares how we build and run all of this. Expect posts on:
+
+- **Operating software we do not fully control.** Running on customer hardware changes how you deploy, upgrade, observe and recover.
+- **Offline-first data.** Sync, conflict resolution and keeping a long-lived record consistent across phones that are offline for days.
+- **Multi-tenancy.** Keeping agencies, schools and families properly apart, from the gateway down to the database.
+- **The unglamorous parts.** Migrations, signing, store releases and the traps we fell into along the way.
+
+The next post is a good example. It is about [how we see inside our systems](/blog/observability-at-scolah/), from the services in our cloud to agents on servers in a ministry’s data centre.
+
+Thanks for reading. If you work on similar problems, we would love to hear from you on [GitHub](https://github.com/teamscolah).

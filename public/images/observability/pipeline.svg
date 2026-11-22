@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" role="img" aria-label="Telemetry pipeline from services and agents through the OpenTelemetry Collector to Prometheus, Loki and Tempo, viewed in Grafana">
+<style>
+  .bg{fill:#ffffff}.box{fill:#f5f7fa;stroke:#d5dce6;stroke-width:1.5}.hl{fill:#e8effd;stroke:#2463e3;stroke-width:1.5}.warm{fill:#fff3ea;stroke:#f07316;stroke-width:1.5}
+  .t{font:600 19px Inter,system-ui,sans-serif;fill:#132847}.s{font:400 15px Inter,system-ui,sans-serif;fill:#53637a}.k{font:600 12px ui-monospace,Menlo,monospace;letter-spacing:.08em;fill:#f07316}
+  .ln{stroke:#8a99ad;stroke-width:1.8;fill:none}.lb{stroke:#2463e3;stroke-width:2;fill:none}.mk{fill:#8a99ad}.mkb{fill:#2463e3}
+  @media (prefers-color-scheme: dark){.bg{fill:#0c1626}.box{fill:#122035;stroke:#2a3c5c}.hl{fill:#16294a;stroke:#6f9bff}.warm{fill:#2a1d14;stroke:#ff8a3d}.t{fill:#e8edf5}.s{fill:#a3b1c6}.k{fill:#ff8a3d}.ln{stroke:#5d6f8a}.mk{fill:#5d6f8a}.lb{stroke:#6f9bff}.mkb{fill:#6f9bff}}
+</style>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" class="mk"/></marker><marker id="b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" class="mkb"/></marker></defs>
+<rect class="bg" width="1200" height="600"/>
+<text class="k" x="40" y="56">SOURCES</text>
+<rect class="box" x="40" y="76" width="280" height="104" rx="14"/>
+<text class="t" x="62" y="116">Backend services</text>
+<text class="s" x="62" y="146">Shared library: traces, metrics,</text>
+<text class="s" x="62" y="168">JSON logs from one dependency</text>
+<rect class="box" x="40" y="204" width="280" height="104" rx="14"/>
+<text class="t" x="62" y="244">Server agents</text>
+<text class="s" x="62" y="274">OTLP endpoint handed out by</text>
+<text class="s" x="62" y="296">the control plane, off if empty</text>
+<rect class="box" x="40" y="332" width="280" height="104" rx="14"/>
+<text class="t" x="62" y="372">Pod stdout</text>
+<text class="s" x="62" y="402">Everything else that writes</text>
+<text class="s" x="62" y="424">to the console</text>
+<rect class="hl" x="420" y="130" width="260" height="150" rx="16"/>
+<text class="k" x="444" y="166">OTLP</text>
+<text class="t" x="444" y="200">OpenTelemetry</text>
+<text class="t" x="444" y="226">Collector</text>
+<text class="s" x="444" y="258">batch, enrich, fan out</text>
+<rect class="warm" x="420" y="332" width="260" height="104" rx="14"/>
+<text class="t" x="444" y="372">Promtail</text>
+<text class="s" x="444" y="402">tails container logs</text>
+<text class="s" x="444" y="424">(moving to Alloy)</text>
+<path class="lb" d="M320 128 C370 128 370 190 418 190" marker-end="url(#b)"/>
+<path class="lb" d="M320 256 C370 256 370 220 418 220" marker-end="url(#b)"/>
+<path class="ln" d="M320 384 H418" marker-end="url(#a)"/>
+<rect class="box" x="780" y="60" width="200" height="86" rx="14"/>
+<text class="t" x="802" y="98">Prometheus</text>
+<text class="s" x="802" y="124">metrics + alert rules</text>
+<rect class="box" x="780" y="190" width="200" height="86" rx="14"/>
+<text class="t" x="802" y="228">Loki</text>
+<text class="s" x="802" y="254">logs</text>
+<rect class="box" x="780" y="320" width="200" height="86" rx="14"/>
+<text class="t" x="802" y="358">Tempo</text>
+<text class="s" x="802" y="384">traces</text>
+<path class="lb" d="M680 170 C730 170 730 103 778 103" marker-end="url(#b)"/>
+<path class="lb" d="M680 205 H778" marker-end="url(#b)"/>
+<path class="lb" d="M680 240 C730 240 730 363 778 363" marker-end="url(#b)"/>
+<path class="ln" d="M680 384 C730 384 730 250 778 250" marker-end="url(#a)"/>
+<rect class="hl" x="1040" y="160" width="130" height="140" rx="14"/>
+<text class="t" x="1062" y="224">Grafana</text>
+<text class="s" x="1062" y="250">one pane</text>
+<path class="ln" d="M980 103 C1010 103 1010 200 1038 200" marker-end="url(#a)"/>
+<path class="ln" d="M980 233 H1038" marker-end="url(#a)"/>
+<path class="ln" d="M980 363 C1010 363 1010 266 1038 266" marker-end="url(#a)"/>
+<rect class="warm" x="780" y="470" width="390" height="86" rx="14"/>
+<text class="t" x="802" y="508">Alertmanager</text>
+<text class="s" x="802" y="534">critical pages someone, warnings go to a digest</text>
+<path class="ln" d="M760 103 H750 V512 H778" marker-end="url(#a)"/>
+</svg>

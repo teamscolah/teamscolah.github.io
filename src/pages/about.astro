@@ -1,0 +1,53 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title="About" description="Who writes the Scolah engineering blog." />
+	</head>
+	<body>
+		<Header />
+		<main class="wrap">
+			<article>
+				<p class="eyebrow">About</p>
+				<h1>We build Scolah.</h1>
+				<p>
+					Scolah makes software for the people who look after children and families: the free Scolah
+					app that connects families with their school, and the Scolah Compass suite that social
+					protection programmes use to register households, manage cases, pay benefits and account for
+					every budget line and box of stock.
+				</p>
+				<p>
+					Our products run in our cloud and on servers our customers own, in places where the network
+					is the exception rather than the rule. Most of the interesting engineering comes from that
+					combination.
+				</p>
+				<p>
+					This blog is where the team writes about how we build and run it. Want to know more about the
+					products? Visit <a href="https://scolah.com">scolah.com</a> or read the
+					<a href="https://docs.scolah.com">documentation</a>.
+				</p>
+			</article>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	article {
+		max-width: 720px;
+		padding: 5rem 0 0;
+	}
+	h1 {
+		margin: 0.8rem 0 1.5rem;
+	}
+	@media (max-width: 720px) {
+		article {
+			padding-top: 3rem;
+		}
+	}
+</style>

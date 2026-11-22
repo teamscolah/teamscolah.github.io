@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 470" role="img" aria-label="An OTLP log record in Loki: a few attributes become indexed stream labels, the rest become structured metadata">
+<style>
+  .bg{fill:#ffffff}.box{fill:#f5f7fa;stroke:#d5dce6;stroke-width:1.5}.hl{fill:#e8effd;stroke:#2463e3;stroke-width:1.5}.warm{fill:#fff3ea;stroke:#f07316;stroke-width:1.5}
+  .t{font:600 19px Inter,system-ui,sans-serif;fill:#132847}.s{font:400 15px Inter,system-ui,sans-serif;fill:#53637a}.k{font:600 12px ui-monospace,Menlo,monospace;letter-spacing:.08em;fill:#f07316}
+  .ln{stroke:#8a99ad;stroke-width:1.8;fill:none}.lb{stroke:#2463e3;stroke-width:2;fill:none}.mk{fill:#8a99ad}.mkb{fill:#2463e3}
+  @media (prefers-color-scheme: dark){.bg{fill:#0c1626}.box{fill:#122035;stroke:#2a3c5c}.hl{fill:#16294a;stroke:#6f9bff}.warm{fill:#2a1d14;stroke:#ff8a3d}.t{fill:#e8edf5}.s{fill:#a3b1c6}.k{fill:#ff8a3d}.ln{stroke:#5d6f8a}.mk{fill:#5d6f8a}.lb{stroke:#6f9bff}.mkb{fill:#6f9bff}}
+</style>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" class="mk"/></marker><marker id="b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" class="mkb"/></marker></defs>
+<rect class="bg" width="1200" height="470"/>
+<text class="k" x="40" y="56">ONE OTLP LOG RECORD</text>
+<rect class="box" x="40" y="76" width="380" height="330" rx="16"/>
+<text class="s" x="66" y="122">service.name = "agent"</text>
+<text class="s" x="66" y="160">server.name = "site-a-01"</text>
+<text class="s" x="66" y="198">org.name = "Example Ministry"</text>
+<text class="s" x="66" y="236">severity_text = "ERROR"</text>
+<text class="s" x="66" y="274">trace_id = "4bf92f35…"</text>
+<text class="s" x="66" y="330">body: "apply failed: image</text>
+<text class="s" x="66" y="356">pull timed out"</text>
+<path class="lb" d="M420 140 C520 140 520 130 610 130" marker-end="url(#b)"/>
+<path class="ln" d="M420 230 C520 230 520 300 610 300" marker-end="url(#a)"/>
+<text class="k" x="610" y="56">INDEXED STREAM LABELS</text>
+<rect class="hl" x="610" y="76" width="550" height="110" rx="16"/>
+<text class="t" x="636" y="122">{service_name="agent"}</text>
+<text class="s" x="636" y="156">Cheap to select, but every distinct value is a new stream.</text>
+<text class="k" x="610" y="236">STRUCTURED METADATA</text>
+<rect class="warm" x="610" y="256" width="550" height="150" rx="16"/>
+<text class="t" x="636" y="302">server_name, org_name, severity_text, …</text>
+<text class="s" x="636" y="336">Stored with each line, not indexed.</text>
+<text class="s" x="636" y="364">Filter it in the pipeline: | server_name=~"$server"</text>
+</svg>

@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 560" role="img" aria-label="Two product families on one shared foundation">
+<style>
+  .bg{fill:#ffffff}.box{fill:#f5f7fa;stroke:#d5dce6;stroke-width:1.5}.hl{fill:#e8effd;stroke:#2463e3;stroke-width:1.5}.warm{fill:#fff3ea;stroke:#f07316;stroke-width:1.5}
+  .t{font:600 19px Inter,system-ui,sans-serif;fill:#132847}.s{font:400 15px Inter,system-ui,sans-serif;fill:#53637a}.k{font:600 12px ui-monospace,Menlo,monospace;letter-spacing:.08em;fill:#f07316}
+  .ln{stroke:#8a99ad;stroke-width:1.8;fill:none}.lb{stroke:#2463e3;stroke-width:2;fill:none}.mk{fill:#8a99ad}.mkb{fill:#2463e3}
+  @media (prefers-color-scheme: dark){.bg{fill:#0c1626}.box{fill:#122035;stroke:#2a3c5c}.hl{fill:#16294a;stroke:#6f9bff}.warm{fill:#2a1d14;stroke:#ff8a3d}.t{fill:#e8edf5}.s{fill:#a3b1c6}.k{fill:#ff8a3d}.ln{stroke:#5d6f8a}.mk{fill:#5d6f8a}.lb{stroke:#6f9bff}.mkb{fill:#6f9bff}}
+</style>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" class="mk"/></marker><marker id="b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" class="mkb"/></marker></defs>
+<rect class="bg" width="1200" height="560"/>
+<text class="k" x="60" y="62">FOR FAMILIES AND SCHOOLS</text>
+<rect class="hl" x="60" y="80" width="500" height="200" rx="16"/>
+<text class="t" x="90" y="128">Scolah</text>
+<text class="s" x="90" y="160">A calm record of the people a family looks after.</text>
+<text class="s" x="90" y="186">Free for families, with phone and watch apps.</text>
+<text class="s" x="90" y="212">Schools log the day once; every family sees it</text>
+<text class="s" x="90" y="238">on the timeline they already keep at home.</text>
+<text class="k" x="640" y="62">FOR SOCIAL PROTECTION PROGRAMMES</text>
+<rect class="warm" x="640" y="80" width="500" height="200" rx="16"/>
+<text class="t" x="670" y="128">Scolah Compass suite</text>
+<text class="s" x="670" y="160">Compass: social registry and case management.</text>
+<text class="s" x="670" y="186">Resources: budgets, grants and stock.</text>
+<text class="s" x="670" y="212">Exchange: data in and out of the systems around it.</text>
+<text class="s" x="670" y="238">Platform: run it all on your own servers.</text>
+<path class="ln" d="M310 290 V352" marker-end="url(#a)"/>
+<path class="ln" d="M890 290 V352" marker-end="url(#a)"/>
+<text class="k" x="60" y="384">ONE SHARED FOUNDATION</text>
+<rect class="box" x="60" y="400" width="250" height="110" rx="14"/>
+<text class="t" x="84" y="444">One sign-in</text>
+<text class="s" x="84" y="474">Each product keeps its roles.</text>
+<rect class="box" x="335" y="400" width="250" height="110" rx="14"/>
+<text class="t" x="359" y="444">Weak signal</text>
+<text class="s" x="359" y="474">Field work syncs later.</text>
+<rect class="box" x="610" y="400" width="250" height="110" rx="14"/>
+<text class="t" x="634" y="444">Three languages</text>
+<text class="s" x="634" y="474">English, French, Portuguese.</text>
+<rect class="box" x="885" y="400" width="255" height="110" rx="14"/>
+<text class="t" x="909" y="444">Hosted or yours</text>
+<text class="s" x="909" y="474">Our cloud or your servers.</text>
+</svg>

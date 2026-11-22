@@ -1,0 +1,178 @@
+---
+title: 'Seeing inside Scolah: OpenTelemetry, Prometheus, Loki, Tempo and Grafana'
+description: 'How we observe services in our cloud and agents on customer servers with one OpenTelemetry pipeline, the traps that failed silently on us, and why Grafana Alloy is next.'
+pubDate: '2026-11-22'
+heroImage: '../../assets/blog/observability/server-room.jpg'
+heroAlt: 'Server racks with patch cables in a server room'
+heroCredit: 'Photo by Kevin Ache on <a href="https://unsplash.com/photos/2JJ3wBHu4_0">Unsplash</a>'
+tags: ['Engineering', 'Observability']
+---
+
+import Figure from '../../components/Figure.astro';
+
+Most observability write-ups assume you own every machine you watch. We don’t. Part of Scolah runs in our Kubernetes clusters, and part of it runs on servers in a customer’s own data centre, managed by an agent we ship but on hardware and networks we don’t control.
+
+That shaped almost every decision below. This post covers the stack we run today, a handful of traps that failed **silently** on us (the worst kind), and where we are taking it next.
+
+## The constraints
+
+Three things made this more than “install the Grafana stack”.
+
+1. **Two kinds of telemetry source.** Spring Boot services that we deploy, and agents on customer machines that call home over the public internet, often across slow or metered links.
+2. **The same answers in every environment.** A developer’s laptop, our clusters and a self-hosted install should all use the same dashboards and alert rules, not three drifting copies.
+3. **Telemetry must never be a dependency.** A service has to start and run happily with nothing to send telemetry to. An outage in the monitoring stack must not become an outage in the product.
+
+## The stack
+
+We standardised on **OpenTelemetry (OTLP)** as the only wire format our own code speaks. Everything behind the collector can change without touching an application.
+
+<Figure
+	src="/images/observability/pipeline.svg"
+	alt="Diagram: backend services and server agents send OTLP to an OpenTelemetry Collector, which fans out metrics to Prometheus, logs to Loki and traces to Tempo. Promtail ships pod stdout to Loki. Grafana reads all three and Prometheus drives Alertmanager."
+	caption="The pipeline today. Blue paths are OTLP; grey paths are everything else."
+	wide
+/>
+
+| Signal  | Store      | Why                                                                 |
+| ------- | ---------- | ------------------------------------------------------------------- |
+| Metrics | Prometheus | Alert rules live next to the data; the Kubernetes ecosystem expects it |
+| Logs    | Loki       | Cheap to keep, indexes only labels, accepts OTLP natively           |
+| Traces  | Tempo      | Object-storage backed; Grafana jumps from a log line to its trace   |
+| Viewing | Grafana    | One pane across all three, with trace and log correlation           |
+
+The collector itself is deliberately boring: receive OTLP, batch, add a little context, fan out.
+
+```yaml
+receivers:
+  otlp:
+    protocols:
+      http: {}
+      grpc: {}
+
+processors:
+  batch: {}
+
+exporters:
+  prometheus:
+    endpoint: 0.0.0.0:8889
+    resource_to_telemetry_conversion:
+      enabled: true
+  otlphttp/loki:
+    endpoint: http://loki:3100/otlp
+  otlp/tempo:
+    endpoint: tempo:4317
+
+service:
+  pipelines:
+    metrics: { receivers: [otlp], processors: [batch], exporters: [prometheus] }
+    logs:    { receivers: [otlp], processors: [batch], exporters: [otlphttp/loki] }
+    traces:  { receivers: [otlp], processors: [batch], exporters: [otlp/tempo] }
+```
+
+Because every application only knows “send OTLP to this URL”, swapping a backend (say, to a hosted vendor for a customer who already pays for one) is an exporter change in one file.
+
+## One dependency per service
+
+Every backend service gets traces, Prometheus metrics and structured JSON logs from a single shared library. Adding it is one line in a build file, and the defaults are the same everywhere: the same log fields, the same trace propagation, the same health and metrics endpoints.
+
+The most important default is the one that does nothing. **With no OTLP endpoint configured, export is switched off.** A developer running one service from an IDE needs no collector, and nothing retries into the void. Production turns it on purely through configuration.
+
+The agents on customer servers follow the same rule, with one twist: they don’t carry their own telemetry settings. The control plane hands each agent its OTLP endpoint in the regular heartbeat response, so we can point a whole fleet somewhere new, or turn it off, without logging into a single customer machine. Every signal an agent sends is stamped with which install and which customer it came from, so an alert names the site rather than an IP address.
+
+## Dashboards and alerts as code
+
+Dashboards are JSON in git, not clicks in a UI. The same file is auto-provisioned into the local Docker Compose stack and, wrapped as a ConfigMap, into the clusters, where GitOps picks it up.
+
+The detail that makes this work is **pinning datasource UIDs**. A dashboard refers to its data sources by UID. If each environment generates its own, the same JSON breaks in every environment but the one it was exported from. We give Prometheus, Loki and Tempo fixed UIDs everywhere, so one dashboard file works in all of them.
+
+Alerting lives in the pipeline, not in the product. Our admin portals have health views for looking; Prometheus rules and Alertmanager are for paging. Critical alerts page someone; warnings go to a digest.
+
+## Five traps that failed silently
+
+None of these threw an error. Each one simply produced *less data than we thought*, which is much harder to notice than a crash.
+
+### 1. Loki stream labels vs structured metadata
+
+Loki 3 accepts OTLP logs natively, which is great, but it doesn’t turn every resource attribute into a label. By default only a small set, such as `service_name`, become **indexed stream labels**. Everything else is stored as **structured metadata** on each line.
+
+<Figure
+	src="/images/observability/loki-labels.svg"
+	alt="Diagram: an OTLP log record whose service name becomes an indexed Loki stream label, while server name, organisation name and severity become structured metadata"
+	caption="Only a few attributes become stream labels. The rest travel with the line."
+	wide
+/>
+
+Our first dashboards put everything in the stream selector, and the panels came back empty. Not an error, just nothing. The fix is to select on the labels you have and filter the rest in the pipeline:
+
+```text
+# Returns nothing: server_name is not a stream label
+{service_name="agent", server_name=~"$server"}
+
+# Works: select the stream, then filter on structured metadata
+{service_name="agent"} | server_name=~"$server" | severity_text=~"$level"
+```
+
+There is a second, subtler trap in the template variable. With an “All” option of `.+`, lines where the field is **missing** are filtered out, so an agent that hasn’t reported its organisation yet vanishes from the dashboard. Exactly the agent you most want to see. Using `.*` as the “All” value keeps them.
+
+### 2. Cardinality belongs on logs and traces, not metrics
+
+We are multi-tenant, and it is tempting to put the tenant on every metric. Don’t. Each distinct label value is a new Prometheus time series, and tenants grow without bound. We put tenant and customer context on **logs and traces**, where high cardinality is cheap, and keep metric labels to small, bounded sets: service, outcome, operation.
+
+### 3. Context captured before it existed
+
+We add request context, such as which tenant a request belongs to, to traces and logs with a servlet filter. That filter ran *before* the filter that worked out the tenant. So it read an empty value, and the tenant label simply never appeared. No exception, no warning.
+
+The fix was to make the enrichment filter’s position configurable and run it after tenant resolution in the services that need it. We didn’t reorder the tenant filter, which sits next to authentication in a multi-tenant request path. The lesson we took: **for anything that enriches telemetry, write a test that asserts the field is actually there.**
+
+### 4. A scrape config that matched nothing
+
+A Prometheus Operator `ServiceMonitor` selects **Services** by their labels, not pods. One of our generated Services carried the app label only in its pod selector, not in its own metadata. The ServiceMonitor matched nothing, Prometheus scraped nothing, and nothing complained.
+
+We now have a test that asserts a ServiceMonitor’s selector is a subset of the target Service’s labels. It is a few lines of test code.
+
+### 5. A port that never answered
+
+A Helm chart declared its container port, Service and probes on one port while the application listened on another. The probes could never pass and the scrape could never succeed. Whenever we add a chart now, we check that the Service port, target port and all three probe ports match the port the app actually listens on.
+
+## What’s next: Grafana Alloy
+
+Today, logs reach Loki two ways: OTLP from our own code through the collector, and Promtail tailing container stdout for everything else. Promtail is deprecated upstream in favour of **Grafana Alloy**, so we are moving.
+
+<Figure
+	src="/images/observability/alloy-next.svg"
+	alt="Diagram: today Promtail and the OpenTelemetry Collector both feed Loki; next, Grafana Alloy first replaces Promtail for pod logs and then may receive OTLP too"
+	caption="Two steps. Applications and agents don’t change in either."
+	wide
+/>
+
+**Step 1: Alloy replaces Promtail** for Kubernetes pod logs. The Alloy version of what Promtail does for us is small:
+
+```hcl
+discovery.kubernetes "pods" {
+  role = "pod"
+}
+
+loki.source.kubernetes "pods" {
+  targets    = discovery.kubernetes.pods.targets
+  forward_to = [loki.write.default.receiver]
+}
+
+loki.write "default" {
+  endpoint {
+    url = "http://loki:3100/loki/api/v1/push"
+  }
+}
+```
+
+The plan is to run both side by side, compare line counts per namespace in Loki, and only then remove Promtail.
+
+**Step 2: maybe, one agent.** Alloy ships OpenTelemetry components (`otelcol.receiver.otlp`, `otelcol.exporter.*`), so it could also take over the standalone collector’s job. We will only do that if it matches the collector on our real traffic. Either way the contract with our applications and agents doesn’t change: they speak plain OTLP, and what sits behind the endpoint is our business.
+
+## Takeaways
+
+- **Pick one wire format and hide everything behind it.** OTLP everywhere meant backend changes never touched application code.
+- **Make telemetry optional by default.** No endpoint means no export, and monitoring can never take the product down.
+- **Push config from the control plane** when you don’t own the machines.
+- **Treat “no data” as a bug.** Every trap above showed up as an empty panel, not an error. Test that labels exist, selectors match and ports line up.
+
+If you are running OpenTelemetry against infrastructure you don’t fully control, we would like to compare notes. Find us on [GitHub](https://github.com/teamscolah).

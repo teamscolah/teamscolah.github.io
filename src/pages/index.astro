@@ -1,0 +1,75 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import PostCard from '../components/PostCard.astro';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+
+const posts = (await getCollection('blog')).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const [latest, ...rest] = posts;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+	</head>
+	<body>
+		<Header />
+		<main class="wrap">
+			<section class="intro">
+				<p class="eyebrow">The Scolah engineering blog</p>
+				<h1>Notes from the team building Scolah.</h1>
+				<p>
+					We build software for schools, families and the social protection programmes that look after
+					them, and we run it in our cloud and on our customers' own servers. This is where we write
+					about how.
+				</p>
+			</section>
+			{latest && (
+				<section class="featured">
+					<PostCard post={latest} featured />
+				</section>
+			)}
+			{rest.length > 0 && (
+				<section class="grid">
+					{rest.map((post) => <PostCard post={post} />)}
+				</section>
+			)}
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	.intro {
+		max-width: 760px;
+		padding: 5rem 0 3.5rem;
+	}
+	.intro h1 {
+		margin: 0.8rem 0 1.2rem;
+	}
+	.intro p:last-child {
+		font-size: 1.15rem;
+		margin: 0;
+	}
+	.featured {
+		padding-bottom: 3.5rem;
+		border-bottom: 1px solid var(--line);
+		margin-bottom: 3.5rem;
+	}
+	.grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+		gap: 3rem 2.5rem;
+	}
+	@media (max-width: 720px) {
+		.intro {
+			padding: 3rem 0 2.5rem;
+		}
+		.grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>
