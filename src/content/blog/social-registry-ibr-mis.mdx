@@ -1,0 +1,98 @@
+---
+title: 'Social registries, beneficiary registries and programme MIS: three systems, one family'
+description: 'Tenders ask for "an MIS" or "a social registry" as if they were the same thing. They answer different questions about different people. Here is how to tell them apart, and how Scolah Compass plays each role.'
+pubDate: '2026-11-23'
+heroImage: '../../assets/blog/registries/team-planning-table.jpg'
+heroAlt: 'Five colleagues in a planning meeting around a white conference table'
+heroCredit: 'Photo by Ninthgrid on <a href="https://unsplash.com/photos/AekHsx1SxXQ">Unsplash</a>'
+tags: ['Product', 'Social protection']
+---
+
+import Figure from '../../components/Figure.astro';
+
+In [the Kinlink post](/blog/kinlink/) we met Joyce Osei, registered by a cash transfer, an NGO nutrition programme and a school-feeding scheme, three times and three different ways. Who is responsible for knowing that all three are the same girl?
+
+The honest answer is that it depends which system you mean. Social protection people talk about a **social registry**, an **integrated beneficiary registry** and a **programme MIS**. Tenders often ask for one when they mean another, and vendors often say "yes" to all three. They are different systems that answer different questions about different groups of people.
+
+## Three questions, three systems
+
+The clearest reference is the World Bank's [*Sourcebook on the Foundations of Social Protection Delivery Systems*](https://openknowledge.worldbank.org/handle/10986/34044) (Lindert and others, 2020). It describes a delivery chain that every programme follows in some form: **assess** who needs help, **enrol** the people who qualify, **provide** benefits and services, and **manage** each beneficiary over time. Each of the three systems sits in a different place on that chain.
+
+<Figure
+	src="/images/registries/delivery-chain.svg"
+	alt="Diagram: the delivery chain runs assess, enrol, provide, manage. The social registry covers assess, each programme's MIS covers enrol to manage, and the integrated beneficiary registry reads across all the programme MIS"
+	caption="The social registry feeds the programmes, each programme runs its own MIS, and the beneficiary registry reads across them."
+	wide
+/>
+
+| | Social registry | Integrated beneficiary registry | Programme MIS |
+|---|---|---|---|
+| **The question** | Who *might* qualify? | Who *gets* what, from which programmes? | How is *this* programme delivered? |
+| **Who is in it** | Everyone registered, including people receiving nothing | People enrolled in at least one programme | One programme's beneficiaries |
+| **Main jobs** | Outreach, intake, household data, needs assessment | Overlaps and gaps across programmes, coordination, reporting | Enrolment, payments, case management, exits |
+| **How it usually fails** | Data goes stale between survey rounds | Each programme spells people differently, so overlaps are missed | Each programme builds its own, with no link to the others |
+
+**A social registry** is about potential. It holds information on households that have registered, or been surveyed, whether or not any programme ever enrols them. Its main output is an assessment of needs and conditions, often a proxy means test score, that programmes use to decide eligibility. A good social registry serves many programmes at once.
+
+**A programme MIS** (the Sourcebook calls it a beneficiary operations management system) runs one programme. It records who was enrolled and why, works out what each person is owed, sends payments, tracks visits and conditions, and decides when someone leaves. This is where caseworkers and finance officers spend their day.
+
+**An integrated beneficiary registry** reads across the programme MIS. It answers questions no single programme can: Is this family receiving three transfers while their neighbours receive none? How much reached this district last quarter, across every programme? Its users are coordinators, planners and auditors rather than field staff.
+
+## Why countries end up with all three, and gaps in between
+
+The order things usually happen in explains most of the trouble.
+
+Programmes come first, and each one buys or builds its own MIS. A donor-funded cash transfer gets one system, the school-feeding scheme gets another, and an NGO runs on spreadsheets. Each is reasonable on its own.
+
+The social registry often comes next, as a national survey. It is expensive to run, so it is repeated every few years, and households move, grow and change in between. Programmes that rely on it are enrolling people based on old circumstances.
+
+The beneficiary registry is usually built last, to stitch the programme systems together. That is where it meets Joyce. Every programme wrote her name, birth date and phone number its own way, so a simple join misses the overlaps it was built to find. The registry is only as good as its matching.
+
+## How Scolah Compass plays each role
+
+[Scolah Compass](https://compass.scolah.com) is case management and registry software for social protection programmes. We built it so one system can play all three roles, while keeping each role's work separate.
+
+### As a social registry
+
+- **Intake on any channel.** Configurable application forms on the web, on the mobile app (which works offline and syncs later), and over USSD and WhatsApp for people without a smartphone.
+- **Households, not just individuals.** People are grouped into households under a head, with household-level fields.
+- **Needs assessment.** Proxy means test formulas are set up per programme. Scores are kept with the record, and households can be re-scored when circumstances change, rather than waiting for the next survey round.
+- **Areas.** Records sit in a tree of regions, districts and communities, and staff can be limited to the areas they work in.
+- **Existing registries as a source.** When a national registry already exists, Compass can search it and import people and households from it using the [Digital Convergence Initiative](https://spdci.org/) search standard, instead of registering them again.
+
+### As a programme MIS
+
+- **Programmes and enrolment.** Applicants move through review into enrolment, with approval steps where one person makes a change and another approves it.
+- **Payments.** Single and bulk disbursements, payment cycles, in-kind distributions, and mobile money and bank integrations. Bulk payments use typed filters, and a filter on a field that doesn't exist is refused rather than skipped. Skipping it would pay everyone.
+- **Proof of life** before payments continue.
+- **Case management.** Cases, field visits with GPS, assessments, interventions and notes.
+- **Exits.** Graduation rules and household exits.
+- **A timeline for every person.** An append-only journey records each registration, score, enrolment, payment and visit, with who did it and when.
+
+### As an integrated beneficiary registry
+
+- **One person, many programmes.** A beneficiary can be enrolled in several programmes at once, each with its own status, so overlaps can be seen on the record rather than discovered in an audit.
+- **Data from other systems.** Programmes keep running their own systems, and [Compass Exchange](https://docs.scolah.com/en/exchange/) brings their data in through connectors for databases such as SQL Server, file drops over FTP, and CSV.
+- **Matching that survives messy data.** This is the job [Kinlink](https://github.com/teamscolah/kinlink) was built for: it scores each candidate pair, explains the evidence, and sends uncertain pairs to a person to confirm or reject. Kinlink is open source and runs on its own, so it is useful even where Compass is not.
+- **Reporting across programmes.** Indicators and reports can count beneficiaries, payments and visits across every programme an agency runs, by area and over time.
+- **Sharing.** Other systems can read from Compass through its Public API, using keys limited to the data they need.
+
+## What one system changes
+
+Playing all three roles in one place removes the hand-offs where most errors creep in.
+
+- A registrant becomes a beneficiary without anyone typing them in again, so there is no second spelling of their name to match later.
+- Their proxy means test score, their enrolment and their payments sit on one timeline. A reviewer can see why someone was enrolled next to what they have received.
+- Overlap checks happen when a person is enrolled, not months later when the beneficiary registry runs its reconciliation.
+
+The roles stay distinct, though. A registration officer, a payments officer and a planner see different screens, with different permissions and reports. One system does not mean one job.
+
+## When Compass should not be all three
+
+Many countries already have a national social registry, or a programme MIS that works well. Replacing a working system to tidy a diagram is rarely worth the disruption.
+
+In that case Compass takes the roles that are missing. It can be the MIS for a new programme, enrolling people found through the national registry. It can sit next to existing MIS as the beneficiary registry, pulling their data through Exchange and matching it with Kinlink. Or it can run alongside the national registry and send back what it learns, through its API.
+
+## Getting in touch
+
+If you are scoping a registry or an MIS, or writing the tender for one, we are happy to talk it through, even if the answer is a system other than ours. The [Kinlink post](/blog/kinlink/) has the details of how matching works, and the [Compass documentation](https://docs.scolah.com/en/compass/) covers each feature above.

@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 520" role="img" aria-label="Diagram. The delivery chain runs assess, enrol, provide, manage. The social registry covers assess. Each programme's MIS covers enrol, provide and manage. The integrated beneficiary registry sits under the programme MIS and reads across all of them. A dashed outline shows that Scolah Compass can play all three roles.">
+<style>
+  .bg{fill:#ffffff}
+  .cv{font:700 18px Inter,system-ui,sans-serif;letter-spacing:.06em;fill:#ffffff}
+  .sr{fill:#ebf4fb;stroke:#4f8fd0;stroke-width:1.5}.srk{font:600 12px ui-monospace,Menlo,monospace;letter-spacing:.08em;fill:#2f74b8}
+  .mis{fill:#f5f7fa;stroke:#d5dce6;stroke-width:1.5}.misk{font:600 12px ui-monospace,Menlo,monospace;letter-spacing:.08em;fill:#53637a}
+  .ibr{fill:#e6f5f3;stroke:#1b998b;stroke-width:1.5}.ibrk{font:600 12px ui-monospace,Menlo,monospace;letter-spacing:.08em;fill:#14786d}
+  .t{font:600 19px Inter,system-ui,sans-serif;fill:#132847}.s{font:400 15px Inter,system-ui,sans-serif;fill:#53637a}.k{font:600 12px ui-monospace,Menlo,monospace;letter-spacing:.08em;fill:#53637a}
+  .ln{stroke:#8a99ad;stroke-width:1.8;fill:none}.mk{fill:#8a99ad}.lt{stroke:#1b998b;stroke-width:2;fill:none}.mkt{fill:#1b998b}
+  .dash{stroke:#132847;stroke-width:1.5;stroke-dasharray:7 6;fill:none}.kd{font:600 12px ui-monospace,Menlo,monospace;letter-spacing:.08em;fill:#132847}
+  @media (prefers-color-scheme: dark){.bg{fill:#0c1626}
+    .sr{fill:#13243a;stroke:#6aa8e6}.srk{fill:#7fb6ec}
+    .mis{fill:#122035;stroke:#2a3c5c}.misk{fill:#a3b1c6}
+    .ibr{fill:#0f2a2a;stroke:#3cc2b2}.ibrk{fill:#3cc2b2}
+    .t{fill:#e8edf5}.s{fill:#a3b1c6}.k{fill:#a3b1c6}.ln{stroke:#5d6f8a}.mk{fill:#5d6f8a}.lt{stroke:#3cc2b2}.mkt{fill:#3cc2b2}
+    .dash{stroke:#a3b1c6}.kd{fill:#e8edf5}}
+</style>
+<defs>
+<linearGradient id="gA" x1="0" x2="1"><stop offset="0" stop-color="#5a93d2"/><stop offset="1" stop-color="#5cbdd6"/></linearGradient>
+<linearGradient id="gE" x1="0" x2="1"><stop offset="0" stop-color="#cf3a2c"/><stop offset="1" stop-color="#f4b63f"/></linearGradient>
+<linearGradient id="gP" x1="0" x2="1"><stop offset="0" stop-color="#3f8a3a"/><stop offset="1" stop-color="#6dbd5b"/></linearGradient>
+<linearGradient id="gM" x1="0" x2="1"><stop offset="0" stop-color="#5a3d97"/><stop offset="1" stop-color="#8e4a9e"/></linearGradient>
+<marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" class="mk"/></marker>
+<marker id="t" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" class="mkt"/></marker>
+<clipPath id="srC"><rect x="40" y="188" width="260" height="124" rx="10"/></clipPath>
+<clipPath id="misA"><rect x="326" y="188" width="832" height="56" rx="10"/></clipPath>
+<clipPath id="misB"><rect x="326" y="256" width="832" height="56" rx="10"/></clipPath>
+</defs>
+<rect class="bg" width="1200" height="520"/>
+<text class="k" x="40" y="36">THE DELIVERY CHAIN</text>
+<path fill="url(#gA)" d="M40 52H306L328 94L306 136H40Z"/>
+<path fill="url(#gE)" d="M318 52H592L614 94L592 136H318L340 94Z"/>
+<path fill="url(#gP)" d="M604 52H878L900 94L878 136H604L626 94Z"/>
+<path fill="url(#gM)" d="M890 52H1158L1180 94L1158 136H890L912 94Z"/>
+<text class="cv" x="180" y="100" text-anchor="middle">ASSESS</text>
+<text class="cv" x="469" y="100" text-anchor="middle">ENROL</text>
+<text class="cv" x="755" y="100" text-anchor="middle">PROVIDE</text>
+<text class="cv" x="1038" y="100" text-anchor="middle">MANAGE</text>
+
+<rect class="dash" x="22" y="168" width="1156" height="296" rx="14"/>
+<rect class="sr" x="40" y="188" width="260" height="124" rx="10"/>
+<rect x="40" y="188" width="260" height="6" fill="url(#gA)" clip-path="url(#srC)"/>
+<text class="srk" x="60" y="218">SOCIAL REGISTRY</text>
+<text class="t" x="60" y="248">Who might qualify?</text><text class="s" x="60" y="274">everyone registered,</text><text class="s" x="60" y="296">receiving or not</text>
+
+<rect class="mis" x="326" y="188" width="832" height="56" rx="10"/>
+<g clip-path="url(#misA)"><rect x="326" y="188" width="274" height="6" fill="url(#gE)"/><rect x="600" y="188" width="286" height="6" fill="url(#gP)"/><rect x="886" y="188" width="272" height="6" fill="url(#gM)"/></g>
+<text class="misk" x="346" y="224">PROGRAMME A MIS</text><text class="t" x="560" y="226">How is this programme delivered?</text>
+<rect class="mis" x="326" y="256" width="832" height="56" rx="10"/>
+<g clip-path="url(#misB)"><rect x="326" y="256" width="274" height="6" fill="url(#gE)"/><rect x="600" y="256" width="286" height="6" fill="url(#gP)"/><rect x="886" y="256" width="272" height="6" fill="url(#gM)"/></g>
+<text class="misk" x="346" y="292">PROGRAMME B MIS</text><text class="s" x="560" y="294">one for each programme</text>
+<path class="ln" d="M300 250H322" marker-end="url(#a)"/>
+<path class="lt" d="M500 316V354" marker-end="url(#t)"/><path class="lt" d="M742 316V354" marker-end="url(#t)"/><path class="lt" d="M984 316V354" marker-end="url(#t)"/>
+<rect class="ibr" x="326" y="360" width="832" height="84" rx="10"/>
+<text class="ibrk" x="346" y="386">INTEGRATED BENEFICIARY REGISTRY</text>
+<text class="t" x="346" y="420">Who gets what, across all programmes?</text>
+<text class="kd" x="40" y="496">SCOLAH COMPASS CAN PLAY ALL THREE ROLES</text>
+</svg>
