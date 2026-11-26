@@ -9,6 +9,9 @@ tags: ['Product', 'Social protection']
 ---
 
 import Figure from '../../components/Figure.astro';
+import household from '../../assets/blog/registries/household.png';
+import journey from '../../assets/blog/registries/journey.png';
+import programmes from '../../assets/blog/registries/programmes.png';
 
 Joyce Osei is registered by a cash transfer, an NGO nutrition programme and a school-feeding scheme: three times, three different ways. Who is responsible for knowing that all three are the same girl?
 
@@ -60,6 +63,12 @@ The beneficiary registry is usually built last, to stitch the programme systems 
 - **Areas.** Records sit in a tree of regions, districts and communities, and staff can be limited to the areas they work in.
 - **Existing registries as a source.** When a national registry already exists, Compass can search it and import people and households from it using the [Digital Convergence Initiative](https://spdci.org/) search standard, instead of registering them again.
 
+<Figure
+	src={household}
+	alt="Compass household page: household HH-8F3CEE0A, headed by Hawa Mahama, with six members, their relationship to the head and dates of birth"
+	caption="A household in Compass: its head, members, children and area. Seeded test data."
+/>
+
 ### As a programme MIS
 
 - **Programmes and enrolment.** Applicants move through review into enrolment, with approval steps where one person makes a change and another approves it.
@@ -69,6 +78,12 @@ The beneficiary registry is usually built last, to stitch the programme systems 
 - **Exits.** Graduation rules and household exits.
 - **A timeline for every person.** An append-only journey records each registration, score, enrolment, payment and visit, with who did it and when.
 
+<Figure
+	src={journey}
+	alt="Compass beneficiary journey for Hawa Mahama: registered, enrolled in Household Cash Transfer, joined a household, household moved, disbursement of 300 GHS created"
+	caption="One person's journey, from registration to enrolment to payment, with who did each step. Seeded test data."
+/>
+
 ### As an integrated beneficiary registry
 
 - **One person, many programmes.** A beneficiary can be enrolled in several programmes at once, each with its own status, so overlaps can be seen on the record rather than discovered in an audit.
@@ -76,6 +91,12 @@ The beneficiary registry is usually built last, to stitch the programme systems 
 - **Matching that survives messy data.** This is the job [Kinlink](https://github.com/teamscolah/kinlink) was built for: it scores each candidate pair, explains the evidence, and sends uncertain pairs to a person to confirm or reject. Kinlink is open source and runs on its own, so it is useful even where Compass is not.
 - **Reporting across programmes.** Indicators and reports can count beneficiaries, payments and visits across every programme an agency runs, by area and over time.
 - **Sharing.** Other systems can read from Compass through its Public API, using keys limited to the data they need.
+
+<Figure
+	src={programmes}
+	alt="Compass programmes list: Household Cash Transfer, Flood Relief Response 2025, Women's Seed Capital, Child Protection Response and Cash Plus Livelihoods, with status and dates"
+	caption="Every programme an agency runs, in one place. Seeded test data."
+/>
 
 ## What one system changes
 
