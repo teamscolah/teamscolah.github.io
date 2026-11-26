@@ -1,0 +1,54 @@
+---
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
+
+interface Props {
+	src: ImageMetadata;
+	alt: string;
+	caption?: string;
+}
+
+const { src, alt, caption } = Astro.props;
+---
+
+<figure class="phone-figure">
+	<div class="phone">
+		<span class="camera" aria-hidden="true"></span>
+		<Image src={src} alt={alt} width={540} />
+	</div>
+	{caption && <figcaption set:html={caption} />}
+</figure>
+
+<style>
+	.phone-figure {
+		margin: 0 0 1.4em;
+	}
+	.phone {
+		position: relative;
+		max-width: 280px;
+		margin: 0 auto;
+		padding: 34px 10px 22px;
+		border-radius: 40px;
+		background: #0f1722;
+		box-shadow:
+			0 0 0 2px #2b3646,
+			0 14px 30px rgba(19, 40, 71, 0.18);
+	}
+	.camera {
+		position: absolute;
+		top: 13px;
+		left: 50%;
+		width: 10px;
+		height: 10px;
+		margin-left: -5px;
+		border-radius: 50%;
+		background: #26313f;
+	}
+	.phone :global(img) {
+		display: block;
+		width: 100%;
+		height: auto;
+		border: 0;
+		border-radius: 18px;
+	}
+</style>

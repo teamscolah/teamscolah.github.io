@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 520" role="img" aria-label="Diagram of one child's immunisation life cycle in seven steps: register the birth, enrol in the programme, plan each dose, vaccinate, follow up missed doses, report, and complete. Scolah Compass Exchange links the first step to civil registration and the reporting step to DHIS2. Scolah Compass Resources supplies the doses for the plan and vaccinate steps.">
+<style>
+  .bg{fill:#ffffff}
+  .line{stroke:#17a04a;stroke-width:4;fill:none}
+  .dot{fill:#17a04a}.dn{font:700 17px Inter,system-ui,sans-serif;fill:#ffffff}
+  .t{font:600 18px Inter,system-ui,sans-serif;fill:#132847}.s{font:400 14px Inter,system-ui,sans-serif;fill:#53637a}
+  .k{font:600 12px ui-monospace,Menlo,monospace;letter-spacing:.08em;fill:#53637a}
+  .ex{fill:#e8effd;stroke:#2463e3;stroke-width:1.5}.exk{font:600 12px ui-monospace,Menlo,monospace;letter-spacing:.08em;fill:#2463e3}
+  .rs{fill:#fff3ea;stroke:#f07316;stroke-width:1.5}.rsk{font:600 12px ui-monospace,Menlo,monospace;letter-spacing:.08em;fill:#c95a0a}
+  .tick{stroke:#8a99ad;stroke-width:1.5;stroke-dasharray:4 4}
+  @media (prefers-color-scheme: dark){.bg{fill:#0c1626}.line{stroke:#4fcf7f}.dot{fill:#4fcf7f}.dn{fill:#0c1626}
+    .t{fill:#e8edf5}.s{fill:#a3b1c6}.k{fill:#a3b1c6}
+    .ex{fill:#16294a;stroke:#6f9bff}.exk{fill:#6f9bff}.rs{fill:#2a1d14;stroke:#ff8a3d}.rsk{fill:#ff8a3d}.tick{stroke:#5d6f8a}}
+</style>
+<rect class="bg" width="1200" height="520"/>
+<text class="k" x="40" y="40">ONE CHILD, FROM BIRTH TO THE LAST DOSE, IN SCOLAH COMPASS</text>
+
+<path class="line" d="M100 120H1100"/>
+<g>
+  <circle class="dot" cx="100" cy="120" r="22"/><text class="dn" x="100" y="126" text-anchor="middle">1</text>
+  <text class="t" x="100" y="180" text-anchor="middle">Register</text><text class="s" x="100" y="204" text-anchor="middle">the birth and</text><text class="s" x="100" y="224" text-anchor="middle">the household</text>
+</g>
+<g>
+  <circle class="dot" cx="266" cy="120" r="22"/><text class="dn" x="266" y="126" text-anchor="middle">2</text>
+  <text class="t" x="266" y="180" text-anchor="middle">Enrol</text><text class="s" x="266" y="204" text-anchor="middle">in the immunisation</text><text class="s" x="266" y="224" text-anchor="middle">programme</text>
+</g>
+<g>
+  <circle class="dot" cx="433" cy="120" r="22"/><text class="dn" x="433" y="126" text-anchor="middle">3</text>
+  <text class="t" x="433" y="180" text-anchor="middle">Plan each dose</text><text class="s" x="433" y="204" text-anchor="middle">a cycle per dose lists</text><text class="s" x="433" y="224" text-anchor="middle">the children due</text>
+</g>
+<g>
+  <circle class="dot" cx="600" cy="120" r="22"/><text class="dn" x="600" y="126" text-anchor="middle">4</text>
+  <text class="t" x="600" y="180" text-anchor="middle">Vaccinate</text><text class="s" x="600" y="204" text-anchor="middle">each dose recorded,</text><text class="s" x="600" y="224" text-anchor="middle">even offline</text>
+</g>
+<g>
+  <circle class="dot" cx="766" cy="120" r="22"/><text class="dn" x="766" y="126" text-anchor="middle">5</text>
+  <text class="t" x="766" y="180" text-anchor="middle">Follow up</text><text class="s" x="766" y="204" text-anchor="middle">missed doses as</text><text class="s" x="766" y="224" text-anchor="middle">reminders and visits</text>
+</g>
+<g>
+  <circle class="dot" cx="933" cy="120" r="22"/><text class="dn" x="933" y="126" text-anchor="middle">6</text>
+  <text class="t" x="933" y="180" text-anchor="middle">Report</text><text class="s" x="933" y="204" text-anchor="middle">coverage by area,</text><text class="s" x="933" y="224" text-anchor="middle">sent on to DHIS2</text>
+</g>
+<g>
+  <circle class="dot" cx="1100" cy="120" r="22"/><text class="dn" x="1100" y="126" text-anchor="middle">7</text>
+  <text class="t" x="1100" y="180" text-anchor="middle">Complete</text><text class="s" x="1100" y="204" text-anchor="middle">the schedule</text><text class="s" x="1100" y="224" text-anchor="middle">closes</text>
+</g>
+
+<path class="tick" d="M100 250V300"/><path class="tick" d="M933 250V380"/>
+<path class="tick" d="M433 250V380"/><path class="tick" d="M600 250V380"/>
+
+<rect class="ex" x="40" y="300" width="280" height="80" rx="10"/>
+<text class="exk" x="60" y="326">SCOLAH COMPASS EXCHANGE</text>
+<text class="s" x="60" y="350">reads births from civil registration,</text><text class="s" x="60" y="370">and notifies new ones</text>
+
+<rect class="rs" x="360" y="380" width="320" height="80" rx="10"/>
+<text class="rsk" x="380" y="406">SCOLAH COMPASS RESOURCES</text>
+<text class="s" x="380" y="430">reserves the doses a session needs</text><text class="s" x="380" y="450">and records each one given</text>
+
+<rect class="ex" x="800" y="380" width="330" height="80" rx="10"/>
+<text class="exk" x="820" y="406">SCOLAH COMPASS EXCHANGE</text>
+<text class="s" x="820" y="430">sends coverage figures</text><text class="s" x="820" y="450">to the national DHIS2</text>
+</svg>

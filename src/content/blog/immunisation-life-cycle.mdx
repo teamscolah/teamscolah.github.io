@@ -1,0 +1,150 @@
+---
+title: 'From birth registration to the last dose: immunisation on a system you own'
+description: 'Children slip through immunisation programmes at every step: unregistered births, unrecorded doses, missed follow-ups, empty fridges. Here is how Scolah Compass follows one child through the whole life cycle, and how an institution can come to own the system that does it.'
+pubDate: '2026-11-25'
+heroImage: '../../assets/blog/immunisation/mother-and-baby.jpg'
+heroAlt: 'A woman carrying a baby on her back while tending young plants in a field'
+heroCredit: 'Photo by Annie Spratt on <a href="https://unsplash.com/photos/GaLzDCnA5EI">Unsplash</a>'
+tags: ['Product', 'Health']
+---
+
+import Figure from '../../components/Figure.astro';
+import PhoneFrame from '../../components/PhoneFrame.astro';
+import nurse from '../../assets/blog/immunisation/nurse-and-child.jpg';
+import doseCycles from '../../assets/blog/immunisation/dose-cycles.png';
+import dosesGiven from '../../assets/blog/immunisation/doses-given.png';
+import childJourney from '../../assets/blog/immunisation/child-journey.png';
+import vaccineStock from '../../assets/blog/immunisation/vaccine-stock.png';
+import sessionBatch from '../../assets/blog/immunisation/session-batch.png';
+import followUpCase from '../../assets/blog/immunisation/follow-up-case.png';
+import coverage from '../../assets/blog/immunisation/coverage-indicator.png';
+import mobileDose from '../../assets/blog/immunisation/mobile-dose-detail.png';
+import mobileProof from '../../assets/blog/immunisation/mobile-record-proof.png';
+
+Amina is born at home, in a village two hours from the nearest clinic. Her birth is registered six weeks later, when her mother brings her for her first vaccines. She gets her first two doses of the pentavalent vaccine on time. Then the family moves to another district to farm, and nobody notices that her third dose never happens. A year later she appears in two clinic registers under two spellings, and in neither as fully vaccinated.
+
+Every part of that story is common, and every part is a data problem. This post follows one child through the immunisation life cycle, shows where children go missing, and explains how Scolah Compass keeps track of them at each step. It ends with how an institution can come to own the system that does it.
+
+## Where children go missing
+
+- **Births that are never registered.** A child who isn't on any list can't be called for a vaccine.
+- **Doses that are never recorded.** Outreach sessions happen where there is no network, and a paper tally sheet is copied, late or never, into a register.
+- **Defaulters nobody follows up.** A missed third dose looks the same as a child who moved, died or was vaccinated somewhere else.
+- **Stock that runs out or expires.** A session without enough doses sends families home. Doses that expire in a store are paid for twice.
+- **Counts that don't match.** The same child in two registers makes coverage look better than it is, while the child who moved is counted nowhere.
+
+## Following one child
+
+<Figure
+	src="/images/immunisation/life-cycle.svg"
+	alt="Diagram: one child's immunisation life cycle in seven steps: register, enrol, plan each dose, vaccinate, follow up, report, complete. Scolah Compass Exchange links registration to civil registration and reporting to DHIS2; Scolah Compass Resources supplies the doses"
+	caption="Seven steps, one record. Scolah Compass Resources handles the vaccines; Scolah Compass Exchange links to civil registration and DHIS2."
+	wide
+/>
+
+### 1. Register the birth
+
+Amina's record can start in two ways. When civil registration already has her birth, [Scolah Compass Exchange](https://docs.scolah.com/en/exchange/) reads it from the registration system, for example OpenCRVS, and creates her record. When a health worker meets a child whose birth was never registered, Exchange can send a birth notification to the civil registry, so a registrar can complete it. Either way, Amina is linked to her household and its area from the start.
+
+### 2. Enrol in the programme
+
+Amina is enrolled in the immunisation programme like any other Scolah Compass programme. Her record shows which programmes she's in, and a timeline records every step: when she was registered, enrolled and vaccinated, and by whom.
+
+<Figure
+	src={childJourney}
+	alt="Amina Iddrisu's journey in Scolah Compass: her pentavalent vaccine dose approved and then given, each with the time and who recorded it"
+	caption="Amina's timeline: every dose, with when it was given and by whom."
+/>
+
+### 3. Plan each dose
+
+The national schedule lives in the disbursement engine, the same engine that runs cash and in-kind payments. Each dose, such as BCG, the three pentavalent doses or measles, is set up once as a **cycle** for an in-kind item: the vaccine. When a session is planned, a batch is created from the cycle and its filters select the children due, by programme, area and date of birth. Caregivers can be reminded by SMS, WhatsApp or USSD, using the same filters.
+
+<Figure
+	src={doseCycles}
+	alt="Scolah Compass disbursement cycles list: Measles-rubella 1 at 9 months, Penta 3 and OPV 3 at 14 weeks, Penta 2 and OPV 2 at 10 weeks, Penta 1 and OPV 1 at 6 weeks, and BCG and OPV 0 at birth, all in-kind and active"
+	caption="The national schedule as dose cycles, one per dose."
+/>
+
+<Figure
+	src={sessionBatch}
+	alt="A Penta 1 outreach session batch in Scolah Compass: seven children selected by programme and a date-of-birth range, six doses given and none failed"
+	caption="A session from the Penta 1 cycle: the children due, picked by programme and date of birth."
+/>
+
+### 4. Vaccinate, and supply the doses
+
+Each dose given is recorded against the child, with proof that it was given, such as a photo of the signed child health card. Staff at a clinic record doses and proof in the Scolah Compass web portal. Vaccinators at outreach sessions use the Scolah Compass mobile app, which works offline and syncs when the network returns.
+
+<div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', alignItems: 'start' }}>
+<PhoneFrame
+	src={mobileProof}
+	alt="Scolah Compass mobile app, Record Disbursement screen for a child at an outreach session: a Proof row to add a photo, a note that the dose was given and the card signed, and options to take a photo or choose one from the gallery"
+	caption="Recording a dose on the Android app, with a photo of the signed card as proof."
+/>
+<PhoneFrame
+	src={mobileDose}
+	alt="Scolah Compass mobile app showing Amina Iddrisu's dose: one pentavalent vaccine, in-kind, two reference numbers, marked as given, with the vaccinator's note"
+	caption="Amina's dose on the phone: the vaccine, when it was given, and the vaccinator's note."
+/>
+</div>
+
+The doses themselves are handled by [Scolah Compass Resources](https://docs.scolah.com/en/resources/). The vaccine in a dose cycle is linked to a stock item in Resources. A batch reserves the doses its session needs, and each dose given is recorded as a stock movement. Resources also tracks batches and expiry dates when vaccines are received, transfers between stores, and stock counts, so a district can see what it holds and what will expire first.
+
+<Figure
+	src={vaccineStock}
+	alt="Scolah Compass Resources stock balances for a district vaccine store: BCG, measles-rubella and pentavalent vaccines, with the pentavalent lots, their expiry dates and a near-expiry flag"
+	caption="The district vaccine store in Scolah Compass Resources: each lot, when it expires, and which to use first."
+/>
+
+<Figure
+	src={nurse}
+	alt="A nurse in green scrubs with a stethoscope talks with a young girl sitting on a sofa"
+	caption='Every dose recorded where it is given, even with no network. Photo by Lisa Marie Theck on <a href="https://unsplash.com/photos/5PMciQ-z8Xs">Unsplash</a>'
+/>
+
+<Figure
+	src={dosesGiven}
+	alt="Confirmed doses from a Penta 1 outreach session: six children, each with one dose of pentavalent vaccine and a reference number"
+	caption="Each dose given at the session, recorded against the child. One child still pending is followed up."
+/>
+
+### 5. Follow up missed doses
+
+After a session, the batch shows which children received their dose and which are still pending. Those still pending are the defaulters. Caseworkers can follow them up with reminders, cases and home visits, each recorded on the child's timeline. When Amina's family moves, her record moves with her: a health worker in the new district sees the doses she has had and the one she is missing.
+
+<Figure
+	src={followUpCase}
+	alt="A high-priority Scolah Compass case for a child who missed his first pentavalent dose, with a home visit scheduled"
+	caption="A missed dose becomes a case, with a home visit to bring the child back for vaccination."
+/>
+
+When the same child is registered twice, for example under two spellings in two clinics, duplicate review flags the pair. Matching is done by [Kinlink](https://github.com/teamscolah/kinlink), our open-source record-matching engine, which compares names, dates of birth and phone numbers even when they were written differently.
+
+### 6. Report
+
+Indicators track coverage, doses given and children enrolled, by area and month, against the targets the programme sets. Exchange sends the figures to DHIS2, so the national health information system gets them without anyone typing them in again.
+
+<Figure
+	src={coverage}
+	alt="Scolah Compass indicator for Penta 3 coverage among children under one: target 90 percent, actual 88 percent for the latest month, progress 98 percent"
+	caption="Monthly Penta 3 coverage against the programme's 90% target."
+/>
+
+### 7. Complete
+
+When Amina has had her last scheduled dose, graduation rules put her forward for review, and her immunisation enrolment is closed. Her record and its timeline stay, ready for the next programme she joins, such as school health or a child grant.
+
+## Owning the system, not just using it
+
+National immunisation programmes run for decades. The system behind them should belong to the country, not depend on one supplier for every change. Through Enterprise Technology Transfer, an institution can come to own Scolah Compass for its programme.
+
+**It runs on the institution's own servers**, in country if required, with the source code for Scolah Compass, Scolah Compass Resources and Scolah Compass Exchange, and the build instructions, database migrations, API specifications and tests that go with them.
+
+**For an agreed period, we build it together.** The institution's own engineers join our engineering team. They take part in planning, design, building, code review, testing and releases, with a named Scolah technical lead, and our engineers spend time on site with them every year. They can change the system with us or without us. Changes to the shared code go through the same review, tests and security checks as ours, so the code stays stable and the institution is never left on its own.
+
+**After that period, the code is theirs.** The institution takes full ownership of the code for its programme. It can't resell it, but it can keep running, changing and releasing it with its own team, who by then have been doing exactly that for years.
+
+## Getting in touch
+
+If you run an immunisation programme, or are planning the system for one, we'd be glad to talk it through. The [Scolah Compass documentation](https://docs.scolah.com/en/compass/) covers programmes, disbursements and indicators, and the [Exchange documentation](https://docs.scolah.com/en/exchange/) covers the DHIS2 and civil registration connectors.
