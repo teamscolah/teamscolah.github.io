@@ -12,6 +12,9 @@ import Figure from '../../components/Figure.astro';
 import chainedGate from '../../assets/blog/lock-in/chained-gate.jpg';
 import technician from '../../assets/blog/lock-in/technician-rack.jpg';
 import analyst from '../../assets/blog/lock-in/analyst-laptop.jpg';
+import installations from '../../assets/blog/lock-in/platform-installations.png';
+import exchangeChannel from '../../assets/blog/lock-in/exchange-channel.png';
+import catalog from '../../assets/blog/lock-in/platform-catalog.png';
 
 A ministry's social registry holds two million households. The contract with the company that built it ends next year. The ministry asks for its data and receives a CSV with half the fields, or a quote for an "export service". It asks what a move to another system would cost, and nobody can say. So the contract is renewed, and the next tender is written around the system already in place.
 
@@ -71,6 +74,12 @@ You choose the machines: in a ministry data centre, a national cloud or a server
 A small program on each server, the agent, carries out installs and upgrades. It only connects out, over HTTPS, so you don't open any inbound port to us. Every application arrives as a signed bundle of pinned versions, and the agent refuses anything that has been changed. Your security team can see exactly what runs and why. The [security page](https://docs.scolah.com/en/platform/security/) sets out what the agent can and cannot do.
 
 <Figure
+	src={installations}
+	alt="Scolah Compass Platform installations list: programme dashboards, volunteer onboarding and staff training applications running on the organisation's own servers, with their state and last report"
+	caption="Every application on your servers, its state and its last health report, in one portal."
+/>
+
+<Figure
 	src={technician}
 	alt="A technician in a high-visibility vest working on equipment in a server rack"
 	caption='Your servers, your team, your rules. Photo by Valentin Lacoste on <a href="https://unsplash.com/photos/ufT32_VFS-I">Unsplash</a>'
@@ -87,9 +96,21 @@ Application data lives on your servers, in widely used open-source databases: Po
 - **[Scolah Compass Exchange](https://docs.scolah.com/en/exchange/)** moves records between Scolah Compass and other systems, including DHIS2, FHIR servers and databases, without custom code from us.
 - **Disaster recovery**, with the next agent release, keeps a standby copy on a second server you choose. Backups go to an S3-compatible bucket you control, encrypted with a password you set.
 
+<Figure
+	src={exchangeChannel}
+	alt="A Scolah Compass Exchange channel on its canvas: beneficiary events filtered, fields mapped, and records created on a shared FHIR health record server"
+	caption="An Exchange channel sending Scolah Compass beneficiaries to a FHIR health record server, built without custom code."
+/>
+
 ### Other tools sit beside ours, not behind it
 
 The same platform installs widely used open-source applications: DHIS2, openIMIS, UNICEF HOPE, KoboToolbox, OpenMRS, Metabase and Moodle among them. They are the open-source projects their communities publish, and they remain yours to run with or without us. We released our own record-matching engine, [Kinlink](https://github.com/teamscolah/kinlink), as open source for the same reason: matching beneficiaries across programmes shouldn't depend on any one supplier.
+
+<Figure
+	src={catalog}
+	alt="Scolah Compass Platform app catalog: KoboToolbox, Metabase, Scolah Compass, DHIS2, LiteLLM, Keycloak, Moodle and openIMIS, most of them free and open source"
+	caption="The catalog: open-source tools install next to Scolah Compass, on the same servers."
+/>
 
 ## Where we still hold the keys
 
