@@ -1,0 +1,105 @@
+---
+title: 'Vendor lock-in in social protection, and how to break the cycle'
+description: 'A registry built on one supplier''s servers, formats and people tends to stay with that supplier, whatever it costs. Here is how the cycle forms, what buyers can do about it, and how we built Scolah Compass so you can run it, and leave it, on your own terms.'
+pubDate: '2026-11-26'
+heroImage: '../../assets/blog/lock-in/server-room-cables.jpg'
+heroAlt: 'A data centre with rows of server cabinets and blue network cables running overhead'
+heroCredit: 'Photo by Taylor Vick on <a href="https://unsplash.com/photos/aWslrFhs1w4">Unsplash</a>'
+tags: ['Product', 'Social protection']
+---
+
+import Figure from '../../components/Figure.astro';
+import chainedGate from '../../assets/blog/lock-in/chained-gate.jpg';
+import technician from '../../assets/blog/lock-in/technician-rack.jpg';
+import analyst from '../../assets/blog/lock-in/analyst-laptop.jpg';
+
+A ministry's social registry holds two million households. The contract with the company that built it ends next year. The ministry asks for its data and receives a CSV with half the fields, or a quote for an "export service". It asks what a move to another system would cost, and nobody can say. So the contract is renewed, and the next tender is written around the system already in place.
+
+That is vendor lock-in. It is rarely the result of bad faith. It builds up from ordinary decisions, each sensible on the day it was made, until leaving costs more than staying. In social protection the stakes are higher than in most sectors: the system decides who gets paid, and the data describes the poorest households in a country.
+
+We sell software into this market, so we have a stake in the answer. This post covers how the cycle forms, what buyers can do to break it, and the choices we made in Scolah Compass so that you can run it, and leave it, on your own terms.
+
+## How the cycle forms
+
+<Figure
+	src="/images/lock-in/lock-in-cycle.svg"
+	alt="Diagram of the lock-in cycle: the vendor hosts the system and holds the data; only the vendor can reach it; leaving looks too risky; the next tender is written around the incumbent; and back to the start"
+	caption="Each step makes the next one more likely, and each renewal makes leaving harder."
+	wide
+/>
+
+**1. The vendor hosts the system.** Hosting with the supplier is the quickest way to launch, especially when a programme starts under time pressure. But the servers, the backups and the data now sit somewhere the ministry cannot reach on its own.
+
+**2. Only the vendor can reach it.** Data is stored in a design only the vendor's team understands. Exports leave fields out, or cost extra. Every link to another system, such as a payment provider, a civil registry or DHIS2, is built by the vendor, through the vendor.
+
+**3. Leaving looks too risky.** Nobody can price a migration, because nobody outside the vendor knows what is in the system. The people who understand it work for the supplier. Moving the payroll of a cash transfer mid-year is not a risk any programme manager wants to own.
+
+**4. The next tender fits the incumbent.** The requirements are written by describing the system the ministry already has. Only one bidder can meet them without a migration, so only one bidder can win. The cycle starts again, with more data and more integrations than before.
+
+<Figure
+	src={chainedGate}
+	alt="A gate held shut with steel chains and a padlock"
+	caption='Lock-in is rarely one decision. It is a chain of small ones. Photo by John Salvino on <a href="https://unsplash.com/photos/bqGBbLq_yfc">Unsplash</a>'
+/>
+
+## How to break it
+
+These apply to any supplier, including us. Most can go into a tender or a contract.
+
+- **Choose where the system runs.** Ask for the option to host on your own servers or in a government data centre, even if you start with the vendor's hosting. A system that has only ever run in one place is hard to move later.
+- **Hold your data in formats you can read without the vendor.** Data should sit in standard databases with documented structures, so your own team, or a different supplier, can query it directly.
+- **Test the exit before you need it.** Ask for a full export as part of acceptance testing, and load it into something else. An export that has never been tried is a promise, not a feature.
+- **Insist on open interfaces.** Documented APIs and open standards, such as the [Digital Convergence Initiative](https://spdci.org/) for social protection, FHIR for health and DHIS2 for reporting, mean the next system can connect to yours without the current vendor's help.
+- **Build skills inside your team.** Make sure people on your side can run the servers, read the data and follow what changes. Handover training belongs in the contract, not as an afterthought at the end.
+- **Use open source where it fits.** Tools such as DHIS2, KoboToolbox and openIMIS can be run by anyone. Choosing them doesn't remove the need for good support, but it means support is a market, not a monopoly.
+- **Write the exit into the contract.** Agree on the export format, the handover period and who pays for what, while everyone is still on good terms.
+
+<Figure
+	src={analyst}
+	alt="A woman in a blue blazer working on a laptop in a busy office"
+	caption='The best protection against lock-in is people on your own team who understand the system. Photo by Akinyemi Gbadamosi on <a href="https://unsplash.com/photos/T_CkxezKRTA">Unsplash</a>'
+/>
+
+## How we built Scolah Compass for this
+
+Scolah Compass is not open source, so we are a vendor too. What we can do is make leaving possible, and make staying a choice. These are the decisions we made with [Scolah Compass Platform](https://docs.scolah.com/en/platform/), which runs Scolah Compass and other tools on servers you own.
+
+### It runs on your servers
+
+You choose the machines: in a ministry data centre, a national cloud or a server room down the corridor. Installations run on Docker servers today, and on Kubernetes clusters with the next release of the agent. You can give each one your own web address, including a government domain, with HTTPS set up automatically.
+
+A small program on each server, the agent, carries out installs and upgrades. It only connects out, over HTTPS, so you don't open any inbound port to us. Every application arrives as a signed bundle of pinned versions, and the agent refuses anything that has been changed. Your security team can see exactly what runs and why. The [security page](https://docs.scolah.com/en/platform/security/) sets out what the agent can and cannot do.
+
+<Figure
+	src={technician}
+	alt="A technician in a high-visibility vest working on equipment in a server rack"
+	caption='Your servers, your team, your rules. Photo by Valentin Lacoste on <a href="https://unsplash.com/photos/ufT32_VFS-I">Unsplash</a>'
+/>
+
+### Your data stays with you, in standard databases
+
+Application data lives on your servers, in widely used open-source databases: PostgreSQL, MongoDB and MinIO for files. Our platform keeps configuration, status reports and usage figures, not the records of your beneficiaries. Your team can back up and query the databases with standard tools, without asking us.
+
+### Getting data out is built in
+
+- **The Public API** lets other systems read from Scolah Compass, using keys limited to the data they need.
+- **CSV and Excel exports** are on the main lists, such as beneficiaries, households and programmes.
+- **[Scolah Compass Exchange](https://docs.scolah.com/en/exchange/)** moves records between Scolah Compass and other systems, including DHIS2, FHIR servers and databases, without custom code from us.
+- **Disaster recovery**, with the next agent release, keeps a standby copy on a second server you choose. Backups go to an S3-compatible bucket you control, encrypted with a password you set.
+
+### Other tools sit beside ours, not behind it
+
+The same platform installs widely used open-source applications: DHIS2, openIMIS, UNICEF HOPE, KoboToolbox, OpenMRS, Metabase and Moodle among them. They are the open-source projects their communities publish, and they remain yours to run with or without us. We released our own record-matching engine, [Kinlink](https://github.com/teamscolah/kinlink), as open source for the same reason: matching beneficiaries across programmes shouldn't depend on any one supplier.
+
+## Where we still hold the keys
+
+Being clear about this matters more than any feature above.
+
+- **Scolah Compass itself is our software.** New versions, fixes and support come from us.
+- **Upgrades and the management portal come from us.** Your team can operate the servers and databases, but moving to a new version of Scolah Compass goes through our platform.
+
+That is why we'd encourage you to hold us to the same checklist as any other supplier. Ask for a full export during acceptance testing. Load it somewhere else. Put the handover terms in the contract. A supplier who is confident you'll want to stay shouldn't mind making it easy for you to leave.
+
+## Getting in touch
+
+If you are planning a registry, an MIS or a tender for one, and want to talk through hosting, data ownership or exit terms, we'd be glad to help, even if the system you choose isn't ours. The [Scolah Compass Platform documentation](https://docs.scolah.com/en/platform/) covers servers, installations and security in detail.

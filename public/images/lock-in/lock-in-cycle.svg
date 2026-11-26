@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 560" role="img" aria-label="Diagram of the lock-in cycle. One: the vendor hosts the system and holds the data. Two: the data and integrations only work through the vendor. Three: leaving looks too costly and too risky. Four: the next tender is written around the system already in place. Then back to one.">
+<style>
+  .bg{fill:#ffffff}
+  .box{fill:#fff3ea;stroke:#f07316;stroke-width:1.5}
+  .num{fill:#f07316}.nt{font:700 18px Inter,system-ui,sans-serif;fill:#ffffff}
+  .t{font:600 20px Inter,system-ui,sans-serif;fill:#132847}.s{font:400 15px Inter,system-ui,sans-serif;fill:#53637a}
+  .ln{stroke:#c95a0a;stroke-width:2.2;fill:none}.mk{fill:#c95a0a}
+  .c1{font:600 13px ui-monospace,Menlo,monospace;letter-spacing:.1em;fill:#c95a0a}.c2{font:600 22px Inter,system-ui,sans-serif;fill:#132847}
+  @media (prefers-color-scheme: dark){.bg{fill:#0c1626}.box{fill:#2a1d14;stroke:#ff8a3d}.num{fill:#ff8a3d}.nt{fill:#0c1626}
+    .t{fill:#e8edf5}.s{fill:#a3b1c6}.ln{stroke:#ff8a3d}.mk{fill:#ff8a3d}.c1{fill:#ff8a3d}.c2{fill:#e8edf5}}
+</style>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" class="mk"/></marker></defs>
+<rect class="bg" width="1200" height="560"/>
+
+<rect class="box" x="60" y="50" width="440" height="140" rx="12"/>
+<circle class="num" cx="98" cy="88" r="18"/><text class="nt" x="98" y="94" text-anchor="middle">1</text>
+<text class="t" x="130" y="95">The vendor hosts the system</text>
+<text class="s" x="130" y="124">Servers, backups and the data</text><text class="s" x="130" y="146">all sit with the supplier.</text>
+
+<rect class="box" x="700" y="50" width="440" height="140" rx="12"/>
+<circle class="num" cx="738" cy="88" r="18"/><text class="nt" x="738" y="94" text-anchor="middle">2</text>
+<text class="t" x="770" y="95">Only the vendor can reach it</text>
+<text class="s" x="770" y="124">Exports are partial, formats are private,</text><text class="s" x="770" y="146">and every integration goes through them.</text>
+
+<rect class="box" x="700" y="370" width="440" height="140" rx="12"/>
+<circle class="num" cx="738" cy="408" r="18"/><text class="nt" x="738" y="414" text-anchor="middle">3</text>
+<text class="t" x="770" y="415">Leaving looks too risky</text>
+<text class="s" x="770" y="444">Migration costs are unknown, and the</text><text class="s" x="770" y="466">know-how lives in the vendor's team.</text>
+
+<rect class="box" x="60" y="370" width="440" height="140" rx="12"/>
+<circle class="num" cx="98" cy="408" r="18"/><text class="nt" x="98" y="414" text-anchor="middle">4</text>
+<text class="t" x="130" y="415">The next tender fits the incumbent</text>
+<text class="s" x="130" y="444">Requirements describe the system you</text><text class="s" x="130" y="466">have, so only one bidder can meet them.</text>
+
+<path class="ln" d="M506 120H692" marker-end="url(#a)"/>
+<path class="ln" d="M920 196V362" marker-end="url(#a)"/>
+<path class="ln" d="M694 440H508" marker-end="url(#a)"/>
+<path class="ln" d="M280 364V198" marker-end="url(#a)"/>
+
+<text class="c1" x="600" y="268" text-anchor="middle">THE LOCK-IN CYCLE</text>
+<text class="c2" x="600" y="302" text-anchor="middle">Each renewal makes</text>
+<text class="c2" x="600" y="330" text-anchor="middle">the next one harder to avoid</text>
+</svg>
